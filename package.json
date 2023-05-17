@@ -1,0 +1,19 @@
+{
+  "name": "virtual-classroom-backend",
+  "version": "1.0.0",
+  "description": "virtual classroom server",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon src/index.js"
+  },
+  "author": "ragesh-a",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2"
+  },
+  "devDependencies": {
+    "morgan": "^1.10.0",
+    "nodemon": "^2.0.22"
+  }
+}

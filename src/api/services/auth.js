@@ -25,10 +25,9 @@ exports.registerUser = async (userData) => {
   return newUser;
 };
 
-exports.loginUser = async (emailOrPhone, password) => {
+exports.loginUser = async (emailOrPhone, userPassword) => {
   const existingUser = await User.findOne({ emailOrPhone });
-  if (existingUser && (await verifyPassword(password, existingUser.password))) {
-    delete existingUser.password;
+  if (existingUser && (await verifyPassword(userPassword, existingUser.password))) {
     return existingUser;
   }
   return false;

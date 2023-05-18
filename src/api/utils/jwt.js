@@ -5,7 +5,7 @@ const generateToken = (payload) => jwt.sign(payload, process.env.JWT_SECRET_KEY,
 
 const verifyToken = async (token) => {
   try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY);
+    const decoded = await jwt.verify(token, process.env.JWT_SECRET_KEY);
     return decoded;
   } catch (error) {
     throw new Error('invalid access token');

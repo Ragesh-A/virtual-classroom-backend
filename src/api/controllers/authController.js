@@ -1,4 +1,5 @@
 const { registerUser, loginUser } = require('../services/auth');
+const { filterUserData } = require('../utils/helper');
 const { generateToken } = require('../utils/jwt');
 const { signupSchema, loginSchema } = require('../validations/validation');
 
@@ -18,10 +19,12 @@ exports.login = async (req, res) => {
   try {
     const { value, error } = loginSchema.validate(req.body);
     if (error) throw new Error(error.details[0].message);
-    const user = loginUser(...value);
+    let user = await loginUser(value.emailOrPhone, value.password);
     if (!user) throw new Error('invalid user credentials');
-    const token = await generateToken(user);
-    res.json({ success: { authentication: token } });
+    const { _id, isAdmin } = user;
+    const token = await generateToken({ _id, isAdmin });
+    user = filterUserData(user);
+    res.json({ success: { authentication: token, user } });
   } catch (error) {
     res.json({ error: error.message });
   }

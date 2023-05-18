@@ -1,31 +1,26 @@
-const express = require('express')
-const logger = require('morgan')
-const mongoose = require('mongoose')
-require('dotenv').config()
+const express = require('express');
+const logger = require('morgan');
+const connectDB = require('./config/db.config');
+const cors = require('cors');
+require('dotenv').config();
 
 const PORT = process.env.PORT || 8000;
-const DATABASE_URL = process.env.DATABASE_URL
+const indexRoute = require('./api/routes/indexRoute');
 
-const app = express()
-app.use(logger('dev'))
-app.use(express.json())
-app.use(express.urlencoded({extended: true}))
+const app = express();
 
+app.use(cors());
+app.use(logger('dev'));
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use('/api', indexRoute);
 
-
-
-
-main().then(()=>{
-  app.listen(PORT,()=>{
-    console.log(`server running on port ${PORT}`)
+connectDB()
+  .then(() => {
+    app.listen(PORT, () => {
+      console.log(`server running on port ${PORT}`);
+    });
   })
-}).catch(error=>{
-  console.log(error)
-})
-
-
-async function main(){
- await mongoose.connect(DATABASE_URL)
-}
-
-
+  .catch((error) => {
+    console.error(error);
+  });

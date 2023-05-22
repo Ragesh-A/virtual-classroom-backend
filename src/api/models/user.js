@@ -38,6 +38,7 @@ const userSchema = new mongoose.Schema({
     default: false,
     trim: true,
   },
+  uuid: { type: String, required: true },
 });
 
 module.exports = mongoose.model('User', userSchema);

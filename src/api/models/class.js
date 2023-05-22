@@ -19,7 +19,7 @@ const classSchema = new mongoose.Schema({
     required: true,
     default: false,
   },
-  background_image: {
+  image: {
     type: String,
     trim: true,
   },

@@ -1,7 +1,7 @@
 const express = require('express');
 const logger = require('morgan');
-const connectDB = require('./config/db.config');
 const cors = require('cors');
+const connectDB = require('./config/db.config');
 require('dotenv').config();
 
 const PORT = process.env.PORT || 8000;

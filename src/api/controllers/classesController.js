@@ -53,3 +53,14 @@ exports.createClass = async (req, res) => {
     res.json({ error: error.message });
   }
 };
+
+exports.joinClass = async (req, res) => {
+  try {
+    const { _id } = req.user;
+    const { uuid } = req.body;
+    const isJoined = await Class.addIntoClass(_id, uuid);
+    res.json({ success: isJoined });
+  } catch (error) {
+    res.json({ error: error.message });
+  }
+};

@@ -1,5 +1,6 @@
 /* eslint-disable no-underscore-dangle */
 // eslint-disable-next-line import/no-extraneous-dependencies
+const shortid = require('shortid');
 const { v4: uuid } = require('uuid');
 
 exports.filterUserData = (user) => {
@@ -9,3 +10,10 @@ exports.filterUserData = (user) => {
 };
 
 exports.generateUid = () => uuid();
+
+exports.generateId = () => shortid.generate();
+
+exports.filterClass = (enrolledList) => {
+  const filteredEnrolledList = enrolledList.map((enrolled) => enrolled.classId);
+  return filteredEnrolledList;
+};

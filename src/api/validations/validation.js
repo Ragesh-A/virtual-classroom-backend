@@ -33,7 +33,8 @@ exports.classUpdateSchema = Joi.object({
 
 exports.classSchema = Joi.object({
   name: Joi.string().min(2).max(20).required(),
-  description: Joi.string(),
-  image: Joi.string(),
-  instructor: Joi.string(),
+  section: Joi.string().min(0),
+  description: Joi.string().min(0),
+  image: Joi.string().min(0),
+  instructor: Joi.string().min(0),
 });

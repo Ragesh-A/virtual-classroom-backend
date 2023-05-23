@@ -8,9 +8,14 @@ const classSchema = new mongoose.Schema({
     min: 2,
     max: 20,
   },
-  description: {
+  uuid: {
     type: String,
     required: true,
+    trim: true,
+    unique: true,
+  },
+  description: {
+    type: String,
     trim: true,
     min: 2,
   },

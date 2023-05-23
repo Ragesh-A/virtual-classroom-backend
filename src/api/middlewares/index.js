@@ -7,10 +7,8 @@ exports.requireSignIn = async (req, res, next) => {
     const token = JSON.parse(authorization);
     const user = await verifyToken(token);
     req.user = user;
-    console.log('here also');
     next();
   } catch (error) {
-    console.log('here');
     res.json({ error: error.message, token: false });
   }
 };

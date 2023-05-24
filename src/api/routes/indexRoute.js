@@ -3,7 +3,7 @@ const express = require('express');
 const router = express.Router();
 const authRoute = require('./authRoute');
 const classesRoute = require('./classesRoute');
-const user = require('../services/user');
+const user = require('../controllers/userController');
 const { requireSignIn } = require('../middlewares');
 
 router.use('/auth', authRoute);

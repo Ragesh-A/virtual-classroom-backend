@@ -1,4 +1,5 @@
 const Class = require('../services/classes');
+const { getUser } = require('../services/user');
 const { classUpdateSchema, classSchema } = require('../validations/validation');
 
 exports.userAllClasses = async (req, res) => {
@@ -47,7 +48,8 @@ exports.createClass = async (req, res) => {
     const { value, error } = classSchema.validate(req.body);
     if (error) throw new Error(error.details[0].message);
     const { _id } = req.user;
-    const newClass = await Class.create(value, _id);
+    const user = await getUser(_id);
+    const newClass = await Class.create(value, user);
     res.json({ success: newClass });
   } catch (error) {
     res.json({ error: error.message });
@@ -72,7 +74,6 @@ exports.requestToClass = async (req, res) => {
     const isRequested = await Class.joinRequest(_id, uuid);
     res.json({ success: isRequested });
   } catch (error) {
-    console.log(error)
     res.json({ error: error.message });
   }
 };

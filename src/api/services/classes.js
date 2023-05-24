@@ -30,11 +30,16 @@ exports.updateOne = async (classId, payload) => {
   return updatedClass;
 };
 
-exports.create = async (payload, createdBy) => {
+exports.create = async (payload, { _id: createdBy, subscriber }) => {
   if (!payload.instructor) {
     // eslint-disable-next-line no-param-reassign
     payload.instructor = createdBy;
   }
+  const classCount = await Classes.find({ createdBy }).count();
+  if (!subscriber && classCount >= 5) {
+    throw new Error('limit exceeded needed to subscribe for more');
+  }
+
   const uuid = generateId();
   const newClass = new Classes({
     ...payload,

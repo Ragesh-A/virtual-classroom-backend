@@ -6,10 +6,7 @@ exports.findUserByEmailOrPhone = async (emailOrPhone) => {
   return user;
 };
 
-exports.profile = async (req, res) => {
-  const { _id } = req.user;
-  const user = await User.findOne({ _id });
-  res.json({
-    success: { profile: user },
-  });
+exports.getUser = async (userId) => {
+  const user = await User.findOne({ _id: userId });
+  return user;
 };

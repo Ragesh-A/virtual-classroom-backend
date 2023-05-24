@@ -64,3 +64,26 @@ exports.joinClass = async (req, res) => {
     res.json({ error: error.message });
   }
 };
+
+exports.requestToClass = async (req, res) => {
+  try {
+    const { _id } = req.user;
+    const { uuid } = req.body;
+    const isRequested = await Class.joinRequest(_id, uuid);
+    res.json({ success: isRequested });
+  } catch (error) {
+    console.log(error)
+    res.json({ error: error.message });
+  }
+};
+
+exports.acceptJoinRequest = async (req, res) => {
+  try {
+    const { _id } = req.user;
+    const { classId, userId } = req.body;
+    const isAccepted = await Class.acceptRequest(_id, classId, userId);
+    res.json({ success: isAccepted });
+  } catch (error) {
+    res.json({ error: error.message });
+  }
+};

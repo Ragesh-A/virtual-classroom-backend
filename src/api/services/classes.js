@@ -1,13 +1,15 @@
 const Classes = require('../models/class');
 const Enrolment = require('../models/classEnrollment');
 const { generateId, filterClass } = require('../utils/helper');
+const classHelper = require('../utils/classHelper');
 
 exports.getAllUserClasses = async (userId) => {
   const enrolledClassesPromise = async () => Enrolment.find({ students: { $in: [userId] } }).populate('classId');
   const createdClassesPromise = async () => Classes.find({ createdBy: userId });
-  const [enrolledClassesResult, createdClassesResult] = await Promise.allSettled(
-    [enrolledClassesPromise(), createdClassesPromise()],
-  );
+  const [enrolledClassesResult, createdClassesResult] = await Promise.allSettled([
+    enrolledClassesPromise(),
+    createdClassesPromise(),
+  ]);
   const filteredClass = filterClass(enrolledClassesResult.value);
   return [...filteredClass, ...createdClassesResult.value];
 };
@@ -43,32 +45,27 @@ exports.create = async (payload, createdBy) => {
   return newClass;
 };
 
-async function generateEnrollment(classId) {
-  const newEnrollment = new Enrolment({
-    classId,
-  });
-  await newEnrollment.save();
-  await newEnrollment.populate('classId');
-  return newEnrollment;
-}
-
-exports.addIntoClass = async (userId, uuid) => {
+exports.joinRequest = async (userId, uuid) => {
   const singleClass = await Classes.findOne({ uuid });
   if (!singleClass) throw new Error('could not find the class');
-  const { _id } = singleClass;
-  let enrolled = await Enrolment.findOne({ classId: _id }).populate('classId');
-  if (!enrolled) {
-    enrolled = await generateEnrollment(_id);
+  const { _id, createdBy, instructor } = singleClass;
+  if (userId === createdBy.toString() || userId === instructor.toString()) {
+    return { message: 'you are already in the class' };
   }
-  let message = { message: 'You are already in the class', created: false };
-  if (!(enrolled.classId.createdBy.toString() === userId)) {
-    const isEnrolled = await Enrolment.updateOne(
-      { classId: _id },
-      { $addToSet: { students: userId } },
-    );
-    if (isEnrolled.modifiedCount) {
-      message = { message: 'You are Joined in the class', created: true, class: enrolled };
-    }
+  const response = await classHelper.addIntoWaitingList(_id, userId);
+  return response;
+};
+
+exports.acceptRequest = async (lectureId, classId, studentId) => {
+  const isClassExist = await Classes.findOne({ _id: classId });
+  if (!isClassExist) throw new Error('could not find the class');
+  if (
+    isClassExist.createdBy.toString() !== lectureId
+    && isClassExist.instructor.toString() !== lectureId
+  ) {
+    throw new Error('unauthorized');
   }
-  return message;
+  await classHelper.generateEnrollment(classId);
+  const response = await classHelper.enrollStudent(classId, studentId);
+  return response;
 };

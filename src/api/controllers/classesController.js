@@ -25,9 +25,9 @@ exports.getClass = async (req, res) => {
   try {
     const { classId } = req.params;
     const singleClass = await Class.findOne(classId);
-    res.json({ success: singleClass });
+    res.json({ success: { class: singleClass } });
   } catch (error) {
-    res.json({ error: error.message });
+    res.json({ error: 'no class found' });
   }
 };
 

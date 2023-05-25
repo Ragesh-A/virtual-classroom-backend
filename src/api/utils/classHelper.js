@@ -30,3 +30,8 @@ exports.enrollStudent = async (classId, studentId) => {
   }
   return { message: 'failed to add into class' };
 };
+
+exports.enrolledStudents = async (classId) => {
+  const students = await Enrolment.findOne({ classId }).populate('students');
+  console.log(students);
+};

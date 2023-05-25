@@ -22,7 +22,10 @@ exports.allClasses = async () => {
 
 exports.findOne = async (classId) => {
   const singleClass = await Classes.findOne({ _id: classId });
-  return singleClass;
+  let students = await Enrolment.findOne({ classId }).populate('students');
+  console.log(students);
+  if (!students) students = [];
+  return { class: singleClass, students };
 };
 
 exports.updateOne = async (classId, payload) => {

@@ -29,6 +29,7 @@ exports.loginUser = async (emailOrPhone, userPassword) => {
   const existingUser = await User.findOne({ emailOrPhone });
   if (
     existingUser && (await verifyPassword(userPassword, existingUser.password))) {
+    if (!existingUser.verified) throw new Error('waiting for email verification');
     return existingUser;
   }
   return false;

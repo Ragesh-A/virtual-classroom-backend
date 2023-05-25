@@ -2,6 +2,7 @@ const Classes = require('../models/class');
 const Enrolment = require('../models/classEnrollment');
 const { generateId, filterClass } = require('../utils/helper');
 const classHelper = require('../utils/classHelper');
+const ClassWaitingList = require('../models/classWaitingList');
 
 exports.getAllUserClasses = async (userId) => {
   const enrolledClassesPromise = async () => Enrolment.find({ students: { $in: [userId] } }).populate('classId');
@@ -76,4 +77,41 @@ exports.acceptRequest = async (lectureId, classId, studentId) => {
   await classHelper.generateEnrollment(classId);
   const response = await classHelper.enrollStudent(classId, studentId);
   return response;
+};
+
+exports.rejectRequest = async (classId, studentId) => {
+  const isRemoved = await ClassWaitingList.updateOne(
+    { classId },
+    { $pull: { waiting: studentId } },
+  );
+  if (!isRemoved) throw new Error('failed to remove');
+  return { message: 'removed successfully' };
+};
+
+exports.getStudents = async (classId, userId) => {
+  const singleClass = await Classes.findOne({ _id: classId });
+  if (!singleClass) throw new Error('no class found');
+  if (singleClass.createdBy.toString() !== userId && singleClass.lectureId !== userId) {
+    throw new Error('unauthorized');
+  }
+  const studentsPromise = Enrolment.findOne({ classId }).populate({ path: 'students', select: '-password' });
+  const requestPromise = ClassWaitingList.findOne({ classId }).populate({ path: 'waiting', select: '-password' });
+  let [enrolledStudents, requestingStudents] = await Promise.allSettled([
+    studentsPromise, requestPromise]);
+  if (!enrolledStudents.value) {
+    enrolledStudents = [];
+  }
+  if (!requestingStudents.value) {
+    requestingStudents = [];
+  }
+  enrolledStudents = enrolledStudents.value;
+  requestingStudents = requestingStudents.value;
+
+  return { enrolledStudents, requestingStudents };
+};
+
+exports.removeFromClass = async (classId, studentId) => {
+  const isRemoved = await Enrolment.updateOne({ classId }, { $pull: { students: studentId } });
+  if (!isRemoved) throw new Error('failed to remove the student');
+  return { message: 'removed from the class' };
 };

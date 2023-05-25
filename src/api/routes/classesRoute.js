@@ -12,13 +12,15 @@ router.route('/')
 
 router.route('/join')
   .post(classes.requestToClass)
-  .patch(classes.acceptJoinRequest);
+  .patch(classes.acceptJoinRequest)
+  .delete(classes.rejectJoinRequest);
 
 router.route('/:classId')
   .get(classes.getClass)
   .patch(classes.updateClass);
 
-// router.route('/:classId/discussion')
-// .get(classes.discussion);
+router.route('/:classId/students')
+  .get(classes.students)
+  .delete(classes.removeStudent);
 
 module.exports = router;

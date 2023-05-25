@@ -81,9 +81,41 @@ exports.requestToClass = async (req, res) => {
 exports.acceptJoinRequest = async (req, res) => {
   try {
     const { _id } = req.user;
-    const { classId, userId } = req.body;
-    const isAccepted = await Class.acceptRequest(_id, classId, userId);
+    const { classId, studentId } = req.body;
+    const isAccepted = await Class.acceptRequest(_id, classId, studentId);
     res.json({ success: isAccepted });
+  } catch (error) {
+    res.json({ error: error.message });
+  }
+};
+
+exports.rejectJoinRequest = async (req, res) => {
+  try {
+    const { class: classId, student: studentId } = req.query;
+    const isRejected = await Class.rejectRequest(classId, studentId);
+    res.json({ success: isRejected });
+  } catch (error) {
+    res.json({ error: error.message });
+  }
+};
+
+exports.students = async (req, res) => {
+  try {
+    const { classId } = req.params;
+    const { _id: userId } = req.user;
+    const students = await Class.getStudents(classId, userId);
+    res.json({ success: students });
+  } catch (error) {
+    res.json({ error: 'no class found' });
+  }
+};
+
+exports.removeStudent = async (req, res) => {
+  try {
+    const { student: studentId } = req.query;
+    const { classId } = req.params;
+    const isRemoved = await Class.removeFromClass(classId, studentId);
+    res.json({ success: isRemoved });
   } catch (error) {
     res.json({ error: error.message });
   }

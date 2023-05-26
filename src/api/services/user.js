@@ -17,10 +17,13 @@ exports.findAll = async () => {
   return allUser;
 };
 
-exports.blockOrUnblock = async (studentId) => {
-  const student = await User.findById(studentId);
-  if (!student) throw new Error('user not found');
-  const action = (student.isBlocked ? false : true);
-  const isUpdated = await User.updateOne({ _id: studentId }, { $set: { isBlocked: action } });
-  return `used is ${action ? 'blocked' : 'unblocked'} successfully`;
+exports.blockOrUnblock = async (userId) => {
+  const user = await User.findById(userId);
+  if (!user) throw new Error('user not found');
+  const action = (!user.isBlocked);
+  const isUpdated = await User.updateOne({ _id: userId }, { $set: { isBlocked: action } });
+  if (isUpdated.modifiedCount) {
+    return `used is ${action ? 'blocked' : 'unblocked'} successfully`;
+  }
+  throw new Error(`failed to ${action ? 'block' : 'unblock'} the user`);
 };

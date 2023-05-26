@@ -38,6 +38,10 @@ const userSchema = new mongoose.Schema({
     default: false,
     trim: true,
   },
+  isBlocked: {
+    type: Boolean,
+    default: false,
+  },
   uuid: { type: String, required: true },
 });
 

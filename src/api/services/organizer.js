@@ -10,7 +10,7 @@ exports.createOrganization = async (userId) => {
   return newOrganization;
 };
 
-exports.sendJoinRequest = async (emailOrPhone, userId, message = '') => {
+exports.sendInvitationRequest = async (emailOrPhone, userId, message = '') => {
   const user = await findUserByEmailOrPhone(emailOrPhone);
   const organization = await Organization.findOne({ subscriber: userId });
   if (phoneRegex.test(emailOrPhone)) {

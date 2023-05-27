@@ -9,6 +9,6 @@ router.use(requireSignIn);
 router.use(isSubscriber);
 router.get('/classes', classes.allCreatedClasses);
 router.route('/instructor')
-  .post(organizer.joinRequest);
+  .post(organizer.invitationRequest);
 
 module.exports = router;

@@ -21,3 +21,13 @@ exports.acceptInstructorInvitation = async (req, res) => {
     res.json({ error: error.message });
   }
 };
+
+exports.getInstructors = async (req, res) => {
+  try {
+    const { _id } = req.user;
+    const instructors = await services.findInstructors(_id);
+    res.json({ success: { instructors } });
+  } catch (error) {
+    res.json({ error: error.message });
+  }
+};

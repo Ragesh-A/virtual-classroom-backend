@@ -49,3 +49,8 @@ exports.acceptInvitation = async (userId, instructorId, organizationId) => {
   if (!isUpdated.modifiedCount) throw new Error('You are already in accepted');
   return { message: 'successfully accepted the request' };
 };
+
+exports.findInstructors = async (subscriber) => {
+  const instructors = await Organization.findOne({ subscriber }).populate('instructors');
+  return instructors;
+};

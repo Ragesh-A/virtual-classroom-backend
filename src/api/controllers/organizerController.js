@@ -16,7 +16,7 @@ exports.acceptInstructorInvitation = async (req, res) => {
     const { uuid, organizationId } = req.body;
     const { _id } = req.user;
     const isVerified = await services.acceptInvitation(_id, uuid, organizationId);
-    res.json({ success: { isVerified } });
+    res.json({ success: isVerified });
   } catch (error) {
     res.json({ error: error.message });
   }
@@ -27,6 +27,18 @@ exports.getInstructors = async (req, res) => {
     const { _id } = req.user;
     const instructors = await services.findInstructors(_id);
     res.json({ success: { instructors } });
+  } catch (error) {
+    res.json({ error: error.message });
+  }
+};
+
+exports.removerInstructor = async (req, res) => {
+  try {
+    const { instructor } = req.query;
+    const { _id } = req.user;
+    const isRemoved = await services.removeInstructor(_id, instructor);
+    await services.resetInstructor(instructor);
+    res.json({ success: isRemoved });
   } catch (error) {
     res.json({ error: error.message });
   }

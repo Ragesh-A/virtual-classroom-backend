@@ -2,6 +2,7 @@ const sendMail = require('../utils/mailer');
 const { findUserByEmailOrPhone } = require('./user');
 const Organization = require('../models/organization');
 const User = require('../models/user');
+const Class = require('../models/class');
 
 const phoneRegex = /^\d{3}\d{3}\d{4}$/;
 
@@ -43,8 +44,9 @@ exports.acceptInvitation = async (userId, instructorId, organizationId) => {
   if (userId !== _id.toString()) throw new Error('unauthorized');
   const isUpdated = await Organization.updateOne(
     { _id: organizationId },
-    { $addToSet: { lectures: _id } },
+    { $addToSet: { instructors: _id } },
   );
+  console.log(isUpdated);
   if (!isUpdated.matchedCount) throw new Error('un able to accept the request');
   if (!isUpdated.modifiedCount) throw new Error('You are already in accepted');
   return { message: 'successfully accepted the request' };
@@ -52,5 +54,23 @@ exports.acceptInvitation = async (userId, instructorId, organizationId) => {
 
 exports.findInstructors = async (subscriber) => {
   const instructors = await Organization.findOne({ subscriber }).populate('instructors');
-  return instructors;
+  return instructors.instructors;
+};
+
+exports.removeInstructor = async (subscriber, instructorId) => {
+  console.log(subscriber, instructorId);
+  const isRemoved = await Organization.updateOne(
+    { subscriber },
+    { $pull: { instructors: instructorId } },
+  );
+  if (!isRemoved.modifiedCount) throw new Error('unable to remove the instructor');
+  return { message: 'removed successfully' };
+};
+
+exports.resetInstructor = async (subscriber, instructorId) => {
+  const isReset = await Class.updateMany(
+    { createdBy: subscriber, instructor: instructorId },
+    { $set: { instructor: subscriber } },
+  );
+  return isReset;
 };

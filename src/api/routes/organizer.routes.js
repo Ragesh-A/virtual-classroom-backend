@@ -11,5 +11,7 @@ router.use(isSubscriber);
 router.get('/classes', classes.allCreatedClasses);
 router.route('/instructor')
   .get(organizer.getInstructors)
-  .post(organizer.invitationRequest);
+  .post(organizer.invitationRequest)
+  .delete(organizer.removerInstructor);
+
 module.exports = router;

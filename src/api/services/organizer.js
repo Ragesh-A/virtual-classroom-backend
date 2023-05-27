@@ -4,6 +4,12 @@ const Organization = require('../models/organization');
 
 const phoneRegex = /^\d{3}\d{3}\d{4}$/;
 
+exports.createOrganization = async (userId) => {
+  const newOrganization = new Organization({ subscriber: userId });
+  await newOrganization.save();
+  return newOrganization;
+};
+
 exports.sendJoinRequest = async (emailOrPhone, userId, message = '') => {
   const user = await findUserByEmailOrPhone(emailOrPhone);
   const organization = await Organization.findOne({ subscriber: userId });

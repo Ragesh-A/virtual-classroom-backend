@@ -10,3 +10,14 @@ exports.invitationRequest = async (req, res) => {
     res.json({ error: error.message });
   }
 };
+
+exports.acceptInstructorInvitation = async (req, res) => {
+  try {
+    const { uuid, organizationId } = req.body;
+    const { _id } = req.user;
+    const isVerified = await services.acceptInvitation(_id, uuid, organizationId);
+    res.json({ success: { isVerified } });
+  } catch (error) {
+    res.json({ error: error.message });
+  }
+};

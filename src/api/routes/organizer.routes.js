@@ -6,9 +6,10 @@ const organizer = require('../controllers/organizerController');
 const router = express.Router();
 
 router.use(requireSignIn);
+router.patch('/instructor', organizer.acceptInstructorInvitation);
 router.use(isSubscriber);
 router.get('/classes', classes.allCreatedClasses);
 router.route('/instructor')
+  .get(organizer.getInstructors)
   .post(organizer.invitationRequest);
-
 module.exports = router;

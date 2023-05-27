@@ -1,7 +1,7 @@
 const User = require('../models/user');
 
 exports.findUserByEmailOrPhone = async (emailOrPhone) => {
-  const user = await User.findOne({ emailOrPhone }, { new: true });
+  const user = await User.findOne({ emailOrPhone });
   if (!user) throw new Error('cannot find the user');
   return user;
 };

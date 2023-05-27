@@ -10,7 +10,8 @@ exports.findSubscribers = async () => {
 
 exports.createSubscription = async (userId) => {
   const isUpdated = await User.updateOne({ _id: userId }, { $set: { subscriber: true } });
-  if (!isUpdated.modifiedCount) throw new Error('failed to make the subscription');
+  if (!isUpdated.modifiedCount) throw new Error('subscription is active');
+  if (!isUpdated.matchedCount) throw new Error('failed to make the subscription');
   const isOrganization = await Organization.findOne({ subscriber: userId });
   if (!isOrganization) {
     await createOrganization(userId);

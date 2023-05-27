@@ -120,3 +120,13 @@ exports.removeStudent = async (req, res) => {
     res.json({ error: error.message });
   }
 };
+
+exports.allCreatedClasses = async (req, res) => {
+  try {
+    const { _id } = req.user;
+    const classes = await Class.findAllCreatedClass(_id);
+    res.json({ success: { classes } });
+  } catch (error) {
+    res.json({ error: error.message });
+  }
+};

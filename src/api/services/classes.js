@@ -22,7 +22,7 @@ exports.allClasses = async () => {
 };
 
 exports.findOne = async (classId) => {
-  const singleClass = await Classes.findOne({ _id: classId });
+  const singleClass = await Classes.findOne({ _id: classId }).populate('instructor');
   let students = await Enrolment.findOne({ classId }).populate('students');
   console.log(students);
   if (!students) students = [];
@@ -114,4 +114,10 @@ exports.removeFromClass = async (classId, studentId) => {
   const isRemoved = await Enrolment.updateOne({ classId }, { $pull: { students: studentId } });
   if (!isRemoved) throw new Error('failed to remove the student');
   return { message: 'removed from the class' };
+};
+
+exports.findAllCreatedClass = async (createdBy) => {
+  let allClasses = await Classes.find({ createdBy }).populate('instructor');
+  if (!allClasses) allClasses = [];
+  return allClasses;
 };

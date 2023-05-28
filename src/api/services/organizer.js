@@ -58,7 +58,6 @@ exports.findInstructors = async (subscriber) => {
 };
 
 exports.removeInstructor = async (subscriber, instructorId) => {
-  console.log(subscriber, instructorId);
   const isRemoved = await Organization.updateOne(
     { subscriber },
     { $pull: { instructors: instructorId } },

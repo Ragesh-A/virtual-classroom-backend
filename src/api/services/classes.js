@@ -24,8 +24,9 @@ exports.allClasses = async () => {
 exports.findOne = async (classId) => {
   const singleClass = await Classes.findOne({ _id: classId }).populate('instructor');
   let students = await Enrolment.findOne({ classId }).populate('students');
-  console.log(students);
-  if (!students) students = [];
+  if (!students) {
+    students = [];
+  } else { students = students.students; }
   return { class: singleClass, students };
 };
 

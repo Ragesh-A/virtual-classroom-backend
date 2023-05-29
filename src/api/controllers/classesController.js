@@ -36,9 +36,13 @@ exports.updateClass = async (req, res) => {
     const { classId } = req.params;
     const { value, error } = classUpdateSchema.validate(req.body);
     if (error) throw new Error(error.details[0].message);
+    if (!value.instructor) {
+      delete value.instructor;
+    }
     const updatedClass = await Class.updateOne(classId, value);
     res.json({ success: updatedClass });
   } catch (error) {
+    console.log(error);
     res.json({ error: error.message });
   }
 };

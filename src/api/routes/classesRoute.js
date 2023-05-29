@@ -9,6 +9,7 @@ router.use(requireSignIn);
 router.route('/')
   .get(classes.userAllClasses)
   .post(classes.createClass);
+// .patch(classes.updateClass)
 
 router.route('/join')
   .post(classes.requestToClass)
@@ -22,5 +23,8 @@ router.route('/:classId')
 router.route('/:classId/students')
   .get(classes.students)
   .delete(classes.removeStudent);
+// router.route('/:classId/assignments')
+//   .get('')
+//   .post('');b
 
 module.exports = router;

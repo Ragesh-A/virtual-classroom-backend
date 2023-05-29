@@ -6,7 +6,9 @@ const ClassWaitingList = require('../models/classWaitingList');
 
 exports.getAllUserClasses = async (userId) => {
   const enrolledClassesPromise = async () => Enrolment.find({ students: { $in: [userId] } }).populate('classId');
-  const createdClassesPromise = async () => Classes.find({ createdBy: userId });
+  const createdClassesPromise = async () => Classes.find(
+    { $or: [{ createdBy: userId }, { instructor: userId }] },
+  );
   const [enrolledClassesResult, createdClassesResult] = await Promise.allSettled([
     enrolledClassesPromise(),
     createdClassesPromise(),
@@ -31,7 +33,8 @@ exports.findOne = async (classId) => {
 };
 
 exports.updateOne = async (classId, payload) => {
-  const updatedClass = await Classes.updateOne({ _id: classId, payload });
+  const updatedClass = await Classes.updateOne({ _id: classId }, payload);
+  console.log(updatedClass);
   return updatedClass;
 };
 

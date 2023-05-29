@@ -28,6 +28,7 @@ exports.loginSchema = Joi.object({
 exports.classUpdateSchema = Joi.object({
   name: Joi.string().min(2).max(20),
   description: Joi.string(),
+  instructor: Joi.string().allow(null),
   image: Joi.string(),
 });
 

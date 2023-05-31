@@ -37,7 +37,7 @@ exports.removerInstructor = async (req, res) => {
     const { instructor } = req.query;
     const { _id } = req.user;
     const isRemoved = await services.removeInstructor(_id, instructor);
-    await services.resetInstructor(instructor);
+    await services.resetInstructor(_id, instructor);
     res.json({ success: isRemoved });
   } catch (error) {
     res.json({ error: error.message });

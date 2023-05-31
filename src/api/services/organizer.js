@@ -32,6 +32,9 @@ exports.sendInvitationRequest = async (emailOrPhone, userId, message = '') => {
     <br/><br/>
    Best regards,<br/>
   ${organization.name ? organization.name : ''}`;
+  } else {
+    // eslint-disable-next-line no-param-reassign
+    message += ` if you are interested click this link ${process.env.REACT_IP}/verify/instructor/${user.uuid}/join/${_id}`;
   }
   const isSended = await sendMail(emailOrPhone, subject, message, html);
   return isSended;
@@ -71,5 +74,6 @@ exports.resetInstructor = async (subscriber, instructorId) => {
     { createdBy: subscriber, instructor: instructorId },
     { $set: { instructor: subscriber } },
   );
+  console.log(isReset);
   return isReset;
 };

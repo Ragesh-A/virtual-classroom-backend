@@ -38,7 +38,7 @@ exports.updateOne = async (classId, payload) => {
   return updatedClass;
 };
 
-exports.create = async (payload, { _id: createdBy, subscriber }) => {
+exports.create = async (payload, { _id: createdBy, subscriber }, image = '') => {
   if (!payload.instructor) {
     // eslint-disable-next-line no-param-reassign
     payload.instructor = createdBy;
@@ -52,6 +52,8 @@ exports.create = async (payload, { _id: createdBy, subscriber }) => {
   const newClass = new Classes({
     ...payload,
     uuid,
+    image,
+    subscription: subscriber,
     createdBy,
   });
   await newClass.save();

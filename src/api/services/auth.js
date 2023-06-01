@@ -62,3 +62,10 @@ exports.resetUserPassword = async (otp, emailOrPhone, password) => {
     console.log(updated);
   }
 };
+
+exports.verifyUserOtp = async (emailOrPhone, uuid) => {
+  const user = await User.findOne({ emailOrPhone, uuid });
+  if (!user) throw new Error('invalid otp');
+  console.log(user);
+  return { message: 'otp verified' };
+};

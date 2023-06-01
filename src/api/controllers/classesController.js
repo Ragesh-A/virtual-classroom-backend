@@ -53,9 +53,10 @@ exports.createClass = async (req, res) => {
     if (error) throw new Error(error.details[0].message);
     const { _id } = req.user;
     const user = await getUser(_id);
-    const newClass = await Class.create(value, user);
+    const newClass = await Class.create(value, user, req?.file?.filename);
     res.json({ success: newClass });
   } catch (error) {
+    console.log(error);
     res.json({ error: error.message });
   }
 };

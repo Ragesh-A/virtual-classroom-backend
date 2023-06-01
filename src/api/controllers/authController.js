@@ -1,5 +1,5 @@
 const {
-  registerUser, loginUser, verifyLink, otp, resetUserPassword,
+  registerUser, loginUser, verifyLink, otp, resetUserPassword, verifyUserOtp,
 } = require('../services/auth');
 const { filterUserData, generateUid } = require('../utils/helper');
 const { generateToken } = require('../utils/jwt');
@@ -42,6 +42,16 @@ exports.emailVerification = async (req, res) => {
     const result = await verifyLink(userId, uuid);
     if (!result) throw new Error('can not verify the user');
     res.json({ success: { status: true } });
+  } catch (error) {
+    res.json({ error: error.message });
+  }
+};
+
+exports.verifyOtp = async (req, res) => {
+  try {
+    const { emailOrPhone, otp: userOtp } = req.body;
+    const result = await verifyUserOtp(emailOrPhone, userOtp);
+    res.json({ success: result });
   } catch (error) {
     res.json({ error: error.message });
   }

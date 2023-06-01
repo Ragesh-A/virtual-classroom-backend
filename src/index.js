@@ -1,6 +1,7 @@
 const express = require('express');
 const logger = require('morgan');
 const cors = require('cors');
+const path = require('path');
 const connectDB = require('./config/db.config');
 require('dotenv').config();
 
@@ -13,6 +14,7 @@ app.use(cors());
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(express.static(path.join(__dirname, './public')));
 app.use('/api', indexRoute);
 
 connectDB()

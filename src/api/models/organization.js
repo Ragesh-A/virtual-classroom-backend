@@ -10,6 +10,16 @@ const organizationSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
   }],
+  waiting: [{
+    user: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User',
+    },
+    expire: {
+      type: Date,
+      required: true,
+    },
+  }],
 });
 
 module.exports = mongoose.model('Organization', organizationSchema);

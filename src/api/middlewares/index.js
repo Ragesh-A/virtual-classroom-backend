@@ -1,3 +1,4 @@
+const Class = require('../models/class');
 const User = require('../models/user');
 const { verifyToken } = require('../utils/jwt');
 
@@ -7,6 +8,9 @@ exports.requireSignIn = async (req, res, next) => {
     if (!authorization) throw new Error('unauthorized');
     const token = JSON.parse(authorization);
     const user = await verifyToken(token);
+    const { _id } = user;
+    const isUser = await User.findById(_id);
+    if (!isUser) throw new Error('user is Blocked');
     req.user = user;
     next();
   } catch (error) {
@@ -32,5 +36,20 @@ exports.isSubscriber = async (req, res, next) => {
     next();
   } catch (error) {
     res.json({ error: error.message });
+  }
+};
+
+exports.classIsBlocked = async (req, res, next) => {
+  try {
+    const { isAdmin } = req.user;
+    const { classId } = req.params;
+    if (isAdmin) return next();
+    const isClass = await Class.findById(classId);
+    if (!isClass) throw new Error('no class class found');
+    if (isClass.isBlocked) throw new Error('class is blocked');
+    return next();
+  } catch (error) {
+    res.json({ error: error.message });
+    return false;
   }
 };

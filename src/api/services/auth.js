@@ -27,6 +27,8 @@ exports.registerUser = async (userData, uuid) => {
 
 exports.loginUser = async (emailOrPhone, userPassword) => {
   const existingUser = await User.findOne({ emailOrPhone });
+  if (!existingUser) throw new Error('invalid user credentials');
+  if (existingUser.isBlocked) throw new Error('user blocked');
   if (
     existingUser && (await verifyPassword(userPassword, existingUser.password))) {
     if (!existingUser.verified) throw new Error('waiting for email verification');

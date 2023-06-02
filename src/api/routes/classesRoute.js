@@ -1,5 +1,5 @@
 const express = require('express');
-const { requireSignIn } = require('../middlewares');
+const { requireSignIn, classIsBlocked } = require('../middlewares');
 const classes = require('../controllers/classesController');
 const multer = require('../utils/imageHelper');
 
@@ -16,6 +16,8 @@ router.route('/join')
   .post(classes.requestToClass)
   .patch(classes.acceptJoinRequest)
   .delete(classes.rejectJoinRequest);
+
+router.use(classIsBlocked);
 
 router.route('/:classId')
   .get(classes.getClass)

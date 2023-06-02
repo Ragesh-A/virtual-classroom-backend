@@ -26,7 +26,6 @@ exports.login = async (req, res) => {
     const { value, error } = loginSchema.validate(req.body);
     if (error) throw new Error(error.details[0].message);
     let user = await loginUser(value.emailOrPhone, value.password);
-    if (!user) throw new Error('invalid user credentials');
     const { _id, isAdmin } = user;
     const token = await generateToken({ _id, isAdmin });
     user = filterUserData(user);

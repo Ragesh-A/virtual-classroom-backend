@@ -12,12 +12,10 @@ const organizationSchema = new mongoose.Schema({
   }],
   waiting: [{
     user: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'User',
+      type: String,
     },
     expire: {
       type: Date,
-      required: true,
     },
   }],
 });

@@ -26,7 +26,7 @@ exports.getInstructors = async (req, res) => {
   try {
     const { _id } = req.user;
     const instructors = await services.findInstructors(_id);
-    res.json({ success: { instructors } });
+    res.json({ success: instructors });
   } catch (error) {
     res.json({ error: error.message });
   }
@@ -38,6 +38,17 @@ exports.removerInstructor = async (req, res) => {
     const { _id } = req.user;
     const isRemoved = await services.removeInstructor(_id, instructor);
     await services.resetInstructor(_id, instructor);
+    res.json({ success: isRemoved });
+  } catch (error) {
+    res.json({ error: error.message });
+  }
+};
+
+exports.removeFromWaitingList = async (req, res) => {
+  try {
+    const { user } = req.body;
+    const { _id } = req.user;
+    const isRemoved = await services.removeFromWaitingList(user, _id);
     res.json({ success: isRemoved });
   } catch (error) {
     res.json({ error: error.message });

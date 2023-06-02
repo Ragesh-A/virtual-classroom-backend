@@ -5,7 +5,7 @@ const { filterUserData, generateUid } = require('../utils/helper');
 const { generateToken } = require('../utils/jwt');
 const { signupSchema, loginSchema } = require('../validations/validation');
 const mail = require('../services/mailService');
-const { findUserByEmailOrPhone } = require('../services/user');
+const { findUserByEmailOrPhone, getUser } = require('../services/user');
 
 exports.signup = async (req, res) => {
   try {
@@ -75,6 +75,16 @@ exports.resetPassword = async (req, res) => {
     const { password, emailOrPhone } = req.body;
     await resetUserPassword(req.body.otp, emailOrPhone, password);
     res.json({ success: 'password updated' });
+  } catch (error) {
+    res.json({ error: error.message });
+  }
+};
+
+exports.user = async (req, res) => {
+  try {
+    const { _id } = req.user;
+    const result = await getUser(_id);
+    res.json({ success: { user: result } });
   } catch (error) {
     res.json({ error: error.message });
   }

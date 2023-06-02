@@ -22,7 +22,7 @@ exports.allUser = async (req, res) => {
 exports.blockOrUnblock = async (req, res) => {
   try {
     const { userId } = req.body;
-    const response = userService.blockOrUnblock(userId);
+    const response = await userService.blockOrUnblock(userId);
     res.json({ success: response });
   } catch (error) {
     res.json({ error: error.message });

@@ -38,6 +38,10 @@ const classSchema = new mongoose.Schema({
     ref: 'User',
     required: true,
   },
+  isBlocked: {
+    type: Boolean,
+    default: false,
+  },
 });
 
 module.exports = mongoose.model('Class', classSchema);

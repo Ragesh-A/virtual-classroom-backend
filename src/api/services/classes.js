@@ -8,7 +8,7 @@ exports.getAllUserClasses = async (userId) => {
   const enrolledClassesPromise = async () => Enrolment.find({ students: { $in: [userId] } }).populate('classId');
   const createdClassesPromise = async () => Classes.find(
     { $or: [{ createdBy: userId }, { instructor: userId }] },
-  );
+  ).populate({ path: 'createdBy', select: '-password' });
   const [enrolledClassesResult, createdClassesResult] = await Promise.allSettled([
     enrolledClassesPromise(),
     createdClassesPromise(),
@@ -18,7 +18,7 @@ exports.getAllUserClasses = async (userId) => {
 };
 
 exports.allClasses = async () => {
-  const classes = await Classes.find();
+  const classes = await Classes.find().populate({ path: 'createdBy', select: '-password' });
   if (!classes) throw new Error('something went wrong');
   return classes;
 };
@@ -126,4 +126,11 @@ exports.findAllCreatedClass = async (createdBy) => {
   let allClasses = await Classes.find({ createdBy }).populate('instructor');
   if (!allClasses) allClasses = [];
   return allClasses;
+};
+
+exports.blockOrUnblock = async (_id) => {
+  const isClass = await Classes.findOne({ _id });
+  if (!isClass) throw new Error('class not found');
+  const isUpdated = await Classes.updateOne({ _id }, { $set: { isBlocked: !isClass.isBlocked } });
+  return isUpdated;
 };

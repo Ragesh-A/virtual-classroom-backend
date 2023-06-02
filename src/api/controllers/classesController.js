@@ -15,7 +15,7 @@ exports.userAllClasses = async (req, res) => {
 exports.getAllClasses = async (req, res) => {
   try {
     const classes = await Class.allClasses();
-    res.json({ success: classes });
+    res.json({ success: { classes } });
   } catch (error) {
     res.json({ error: error.message });
   }
@@ -42,7 +42,6 @@ exports.updateClass = async (req, res) => {
     const updatedClass = await Class.updateOne(classId, value);
     res.json({ success: updatedClass });
   } catch (error) {
-    console.log(error);
     res.json({ error: error.message });
   }
 };
@@ -56,7 +55,6 @@ exports.createClass = async (req, res) => {
     const newClass = await Class.create(value, user, req?.file?.filename);
     res.json({ success: newClass });
   } catch (error) {
-    console.log(error);
     res.json({ error: error.message });
   }
 };
@@ -131,6 +129,16 @@ exports.allCreatedClasses = async (req, res) => {
     const { _id } = req.user;
     const classes = await Class.findAllCreatedClass(_id);
     res.json({ success: { classes } });
+  } catch (error) {
+    res.json({ error: error.message });
+  }
+};
+
+exports.blockOrUnblock = async (req, res) => {
+  try {
+    const { classId } = req.body;
+    const isBlocked = await Class.blockOrUnblock(classId);
+    res.json({ success: { isBlocked } });
   } catch (error) {
     res.json({ error: error.message });
   }

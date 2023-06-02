@@ -7,7 +7,8 @@ exports.findUserByEmailOrPhone = async (emailOrPhone) => {
 };
 
 exports.getUser = async (userId) => {
-  const user = await User.findOne({ _id: userId });
+  const user = await User.findOne({ _id: userId }, { password: 0, isAdmin: 0, uuid: 0 });
+  if (!user) throw new Error('no user found');
   return user;
 };
 
@@ -18,7 +19,7 @@ exports.findAll = async () => {
 };
 
 exports.blockOrUnblock = async (userId) => {
-  const user = await User.findById(userId);
+  const user = await User.findOne({ _id: userId });
   if (!user) throw new Error('user not found');
   const action = (!user.isBlocked);
   const isUpdated = await User.updateOne({ _id: userId }, { $set: { isBlocked: action } });

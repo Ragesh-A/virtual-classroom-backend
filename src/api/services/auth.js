@@ -2,6 +2,8 @@
 const bcrypt = require('bcrypt');
 const User = require('../models/user');
 
+const phoneRegex = /^\d{3}\d{3}\d{4}$/;
+
 async function generateHashPassword(password) {
   const hash = await bcrypt.hash(password, 10);
   if (!hash) return false;
@@ -17,6 +19,9 @@ exports.registerUser = async (userData, uuid) => {
   const existingUser = await User.findOne({
     emailOrPhone: userData.emailOrPhone,
   });
+  if (phoneRegex.test(userData.emailOrPhone)) {
+    throw new Error('sms service unavailable, try email');
+  }
   if (existingUser) throw new Error('user already exists');
   const hashPassword = await generateHashPassword(userData.password);
   if (!hashPassword) throw new Error('error while saving the data');
@@ -28,7 +33,7 @@ exports.registerUser = async (userData, uuid) => {
 exports.loginUser = async (emailOrPhone, userPassword) => {
   const existingUser = await User.findOne({ emailOrPhone });
   if (!existingUser) throw new Error('invalid user credentials');
-  if (existingUser.isBlocked) throw new Error('user blocked');
+  if (existingUser.isBlocked) throw new Error('you are blocked');
   if (
     existingUser && (await verifyPassword(userPassword, existingUser.password))) {
     if (!existingUser.verified) throw new Error('waiting for email verification');

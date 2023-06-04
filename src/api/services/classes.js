@@ -53,7 +53,7 @@ exports.create = async (payload, { _id: createdBy, subscriber }, image = '') => 
     ...payload,
     uuid,
     image,
-    subscription: subscriber,
+    subscription: subscriber.status,
     createdBy,
   });
   await newClass.save();

@@ -6,7 +6,7 @@ const router = express.Router();
 
 router.use(requireSignIn);
 router.route('')
-  .get(controller.getSubscriber)
-  .post(controller.newSubscription);
+  .get(controller.subscriptionIntent)
+  .post(controller.createSubscription);
 
 module.exports = router;

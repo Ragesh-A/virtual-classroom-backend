@@ -1,4 +1,5 @@
 const Class = require('../services/classes');
+const { checkSubscriptions } = require('../services/subscriptionServices');
 const { getUser } = require('../services/user');
 const { classUpdateSchema, classSchema } = require('../validations/validation');
 
@@ -25,6 +26,10 @@ exports.getClass = async (req, res) => {
   try {
     const { classId } = req.params;
     const singleClass = await Class.findOne(classId);
+    const result = await checkSubscriptions(singleClass.createdBy);
+    if (!result) {
+      singleClass.class.subscription = false;
+    }
     res.json({ success: { class: singleClass } });
   } catch (error) {
     res.json({ error: 'no class found' });

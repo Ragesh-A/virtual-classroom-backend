@@ -12,6 +12,7 @@ async function generateHashPassword(password) {
 
 const verifyPassword = async (password, hashPassword) => {
   const result = await bcrypt.compare(password, hashPassword);
+  if (!result) throw new Error('Invalid user credentials');
   return result;
 };
 

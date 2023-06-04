@@ -17,15 +17,13 @@ router.route('/join')
   .patch(classes.acceptJoinRequest)
   .delete(classes.rejectJoinRequest);
 
-router.use(classIsBlocked);
-
 router.route('/:classId')
-  .get(classes.getClass)
-  .patch(classes.updateClass);
+  .get(classIsBlocked, classes.getClass)
+  .patch(classIsBlocked, classes.updateClass);
 
 router.route('/:classId/students')
-  .get(classes.students)
-  .delete(classes.removeStudent);
+  .get(classIsBlocked, classes.students)
+  .delete(classIsBlocked, classes.removeStudent);
 // router.route('/:classId/assignments')
 //   .get('')
 //   .post('');b

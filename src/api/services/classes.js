@@ -134,3 +134,8 @@ exports.blockOrUnblock = async (_id) => {
   const isUpdated = await Classes.updateOne({ _id }, { $set: { isBlocked: !isClass.isBlocked } });
   return isUpdated;
 };
+
+exports.classSubscription = async (createdBy, status = false) => {
+  const isUpdated = Classes.updateMany({ createdBy }, { $set: { subscription: status } });
+  return isUpdated;
+};

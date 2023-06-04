@@ -33,10 +33,15 @@ const userSchema = new mongoose.Schema({
     trim: true,
   },
   subscriber: {
-    type: Boolean,
-    required: true,
-    default: false,
-    trim: true,
+    status: {
+      type: Boolean,
+      required: true,
+      default: false,
+      trim: true,
+    },
+    expire: {
+      type: Date,
+    },
   },
   isBlocked: {
     type: Boolean,

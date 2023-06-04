@@ -26,11 +26,13 @@ exports.login = async (req, res) => {
     const { value, error } = loginSchema.validate(req.body);
     if (error) throw new Error(error.details[0].message);
     let user = await loginUser(value.emailOrPhone, value.password);
+    console.log(user);
     const { _id, isAdmin } = user;
     const token = await generateToken({ _id, isAdmin });
     user = filterUserData(user);
     res.json({ success: { authentication: token, user } });
   } catch (error) {
+    console.log(error);
     res.json({ error: error.message });
   }
 };

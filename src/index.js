@@ -16,6 +16,9 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, './public')));
 app.use('/api', indexRoute);
+app.use('*', (req, res) => {
+  res.status(404).json({ message: 'The requested path was not found on the server.' });
+});
 
 connectDB()
   .then(() => {

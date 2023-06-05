@@ -1,13 +1,10 @@
 const express = require('express');
-const controller = require('../controllers/subscriptionController');
+const controller = require('../controllers/messageController');
 const { requireSignIn } = require('../middleware');
 
 const router = express.Router();
-
 router.use(requireSignIn);
-router
-  .route('')
-  .get(controller.subscriptionIntent)
-  .post(controller.createSubscription);
+router.post('/', controller.sendMessage);
+router.get('/:chatId', controller.getMessage);
 
 module.exports = router;

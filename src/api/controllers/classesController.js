@@ -26,8 +26,8 @@ exports.getClass = async (req, res) => {
   try {
     const { classId } = req.params;
     const singleClass = await Class.findOne(classId);
-    const result = await checkSubscriptions(singleClass.createdBy);
-    if (!result) {
+    const isSubs = await checkSubscriptions(singleClass.createdBy);
+    if (!isSubs) {
       singleClass.class.subscription = false;
     }
     res.json({ success: { class: singleClass } });

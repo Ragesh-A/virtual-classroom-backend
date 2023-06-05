@@ -111,9 +111,9 @@ exports.createSubscription = async (
 
 exports.checkSubscriptions = async (_id) => {
   const subscriber = await User.findOne(_id);
-  if (!subscriber?.subscriber.status) return true;
+  if (!subscriber?.subscriber.status) return false;
   if (subscriber?.subscriber.status) {
-    if (!subscriber.subscriber.expire > Date.now()) return true;
+    if (subscriber.subscriber.expire > Date.now()) return true;
     const isUpdated = await User.updateOne({ _id }, { $set: { 'subscriber.status': false } });
     if (!isUpdated) return false;
     const classUpdate = await classSubscription(_id, false);

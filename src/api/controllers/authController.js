@@ -14,7 +14,7 @@ exports.signup = async (req, res) => {
     const uuid = generateUid();
     const user = await registerUser(value, uuid);
     if (!user) throw user;
-    // await mail.sendVerification(user);
+    await mail.sendVerification(user);
     res.json({ success: 'verification mail sended' });
   } catch (error) {
     res.json({ error: error.message });
@@ -26,11 +26,10 @@ exports.login = async (req, res) => {
     const { value, error } = loginSchema.validate(req.body);
     if (error) throw new Error(error.details[0].message);
     let user = await loginUser(value.emailOrPhone, value.password);
-    console.log(user);
     const { _id, isAdmin } = user;
     const token = await generateToken({ _id, isAdmin });
     user = filterUserData(user);
-    res.json({ success: { authentication: token, user } });
+    res.cookie('token', token, { sameSite: 'none', secure: true }).json({ success: { authentication: token, user } });
   } catch (error) {
     console.log(error);
     res.json({ error: error.message });

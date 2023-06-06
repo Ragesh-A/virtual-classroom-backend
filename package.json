@@ -4,7 +4,8 @@
   "description": "virtual classroom server",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon src/index.js"
+    "start": "nodemon src/index.js",
+    "socket-start": "nodemon src/socket/index.js"
   },
   "author": "ragesh-a",
   "license": "ISC",
@@ -21,6 +22,7 @@
     "nodemailer": "^6.9.2",
     "sharp": "^0.32.1",
     "shortid": "^2.2.16",
+    "socket.io": "^4.6.2",
     "stripe": "^12.8.0",
     "uuid": "^9.0.0"
   },

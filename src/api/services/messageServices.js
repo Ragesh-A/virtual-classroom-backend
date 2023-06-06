@@ -1,4 +1,3 @@
-const messageModel = require('../models/messageModel');
 const MessageModel = require('../models/messageModel');
 
 exports.send = async (chatId, senderId, message) => {
@@ -13,6 +12,6 @@ exports.send = async (chatId, senderId, message) => {
 };
 
 exports.get = async (chatId) => {
-  const chats = await messageModel.find({ chatId });
+  const chats = await MessageModel.find({ chatId });
   return chats;
 };

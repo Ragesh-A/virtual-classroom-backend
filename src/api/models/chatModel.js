@@ -6,6 +6,10 @@ const chatSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: 'User',
     }],
+    classId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Class',
+    },
   },
   { timestamps: true },
 );

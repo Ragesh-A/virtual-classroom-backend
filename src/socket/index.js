@@ -9,28 +9,52 @@ const io = require('socket.io')(8800, {
   },
 });
 
-let activeUser = [];
+let activeUsers = [];
+function getOnlineUsersByClass(classId) {
+  return activeUsers.filter((user) => user.classId === classId);
+}
+
+function getSocketId(userId, classId) {
+  return activeUsers.find(
+    (user) => user.userId === userId && user.classId === classId,
+  );
+}
 
 io.on('connection', (socket) => {
-// add new user
-  socket.on('new-user-add', (newUserId) => {
-    console.log(activeUser);
-    if (!activeUser.some((user) => user.userId === newUserId)) {
-      activeUser.push({
-        userId: newUserId,
+  // add new user
+  socket.on('new-user-add', (data) => {
+    console.log(activeUsers);
+    if (
+      !activeUsers.some(
+        (user) => user.userId === data.user && user.classId === data.class,
+      )
+    ) {
+      activeUsers.push({
+        userId: data.user,
+        classId: data.class,
         socketId: socket.id,
       });
     }
 
     // sending to client
+    io.emit('get-users', getOnlineUsersByClass(data.class));
+  });
 
-    io.emit('get-users', activeUser);
+  // send message
+  socket.on('send-message', ({
+    senderId, receiverId, classId, message,
+  }) => {
+    const user = getSocketId(receiverId, classId);
+    io.to(user?.socketId).emit('get-message', {
+      senderId,
+      message,
+    });
   });
 
   // user is disconnected
-  socket.on('disconnected', () => {
-    activeUser = activeUser.filter((user) => user.socketId !== socket.id);
-
-    io.emit('user disconnected', activeUser);
+  socket.on('disconnect', () => {
+    activeUsers = activeUsers.filter((user) => user.socketId !== socket.id);
+    console.log('disconnected');
+    io.emit('user disconnected', activeUsers);
   });
 });

@@ -1,6 +1,7 @@
 const MessageModel = require('../models/messageModel');
 
 exports.send = async (chatId, senderId, message) => {
+  console.log(chatId, senderId, message);
   if (!chatId || !senderId || !message) throw new Error('missing data');
   const newMessage = new MessageModel({
     chatId,

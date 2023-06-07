@@ -2,9 +2,10 @@ const services = require('../services/messageServices');
 
 exports.sendMessage = async (req, res) => {
   try {
-    const { chatId, senderId, message } = req.body;
+    const { _id } = req.user;
+    const { chatId, message } = req.body;
     console.log('ji');
-    const isSended = await services.send(chatId, senderId, message);
+    const isSended = await services.send(chatId, _id, message);
     res.json({ success: { isSended } });
   } catch (error) {
     res.json({ error: { message: error.message } });

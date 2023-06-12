@@ -7,6 +7,7 @@ require('dotenv').config();
 
 const PORT = process.env.PORT || 8000;
 const indexRoute = require('./api/routes/indexRoute');
+const { notFound, errorHandler } = require('./api/middleware/errorHandler');
 
 const app = express();
 
@@ -19,6 +20,9 @@ app.use('/api', indexRoute);
 app.use('*', (req, res) => {
   res.status(404).json({ message: 'The requested path was not found on the server.' });
 });
+
+app.use(notFound);
+app.use(errorHandler);
 
 connectDB()
   .then(() => {

@@ -1,16 +1,18 @@
 const express = require('express');
 const controller = require('../controllers/chatController');
-const { requireSignIn } = require('../middleware/index');
 
-const router = express.Router();
-
-router.use(requireSignIn);
+const router = express.Router({ mergeParams: true });
 
 router.route('')
-  .get(controller.userChats)
-  .post(controller.createChat);
+  .get(controller.allChats)
+  .post(controller.accessChat);
 
-router.route('/find/:firstId/:secondId')
-  .get(controller.findChat);
+router.route('/group')
+  // .get(controller.)
+  .post(controller.createGroup)
+  .patch(controller.updateGroup);
+
+// router.route('/find/:firstId/:secondId')
+//   .get(controller.findChat);
 
 module.exports = router;

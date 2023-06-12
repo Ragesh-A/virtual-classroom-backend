@@ -4,6 +4,7 @@ const classes = require('../controllers/classesController');
 const multer = require('../utils/imageHelper');
 const assignmentRoute = require('./assignment.routes');
 const attendanceRoute = require('./attendance.routes');
+const chatRoute = require('./chat.routes');
 
 const router = express.Router();
 
@@ -37,5 +38,6 @@ router
 
 router.use('/:classId/assignments', assignmentRoute);
 router.use('/:classId/attendance', attendanceRoute);
+router.use('/:classId/chat', chatRoute);
 
 module.exports = router;

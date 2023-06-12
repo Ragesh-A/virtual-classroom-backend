@@ -24,6 +24,7 @@ const chatSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: 'User',
     },
+    class: { type: mongoose.Schema.Types.ObjectId, ref: 'Class' },
   },
   { timestamps: true },
 );

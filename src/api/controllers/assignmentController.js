@@ -7,11 +7,20 @@ exports.create = async (req, res) => {
       // eslint-disable-next-line prefer-const
       classId, title, description, dueDate,
     } = req.body;
+
+    const filename = req?.file?.filename;
     if (typeof classId === 'string') {
       classId = [classId];
     }
     // eslint-disable-next-line max-len
-    const assignment = await services.createAssignment(classId, title, description, dueDate, _id);
+    const assignment = await services.createAssignment(
+      classId,
+      title,
+      description,
+      dueDate,
+      _id,
+      filename,
+    );
     res.json({ success: { assignment } });
   } catch (error) {
     res.json({ error: error.message });
@@ -21,16 +30,21 @@ exports.create = async (req, res) => {
 exports.findByClass = async (req, res) => {
   try {
     const { classId } = req.params;
-    const assignments = await services.allAssignments(classId);
+    const { q } = req.query;
+    const { _id } = req.user;
+    const assignments = await services.allAssignments(classId, _id, q);
     res.json({ success: { assignments } });
   } catch (error) {
+    console.log(error);
     res.json({ error: error.message });
   }
 };
 
 exports.getAssignment = async (req, res) => {
   try {
-    const { assignmentId } = req.params;
+    const { classId, assignmentId } = req.params;
+    console.log(classId, assignmentId);
+    if (!assignmentId || !classId) throw new Error('assignment identification failed');
     const assignment = await services.getAssignment(assignmentId);
     res.json({ success: { assignment } });
   } catch (error) {
@@ -40,9 +54,22 @@ exports.getAssignment = async (req, res) => {
 
 exports.updateOne = async (req, res) => {
   try {
-    const isUpdated = await services.update(req.body);
+    const { assignmentId } = req.params;
+    const { title, description, dueDate } = req.body;
+    let { image } = req.body;
+    const filename = req.file?.filename;
+    if (filename) {
+      image = filename;
+    }
+    const isUpdated = await services.update(assignmentId, {
+      title,
+      description,
+      dueDate,
+      image,
+    });
     res.json({ success: { isUpdated } });
   } catch (error) {
+    console.log(error);
     res.json({ error: error.message });
   }
 };
@@ -52,9 +79,14 @@ exports.createSubmission = async (req, res) => {
     const { assignmentId } = req.params;
     const { _id } = req.user;
     const { answer } = req.body;
-    const isSubmitted = await services.createSubmission(_id, assignmentId, answer);
+    const isSubmitted = await services.createSubmission(
+      _id,
+      assignmentId,
+      answer,
+    );
     res.json({ success: isSubmitted });
   } catch (error) {
+    console.log(error);
     res.json({ error: error.message });
   }
 };

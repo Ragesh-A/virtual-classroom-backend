@@ -20,6 +20,7 @@ const assignmentSchema = new mongoose.Schema({
     required: true,
     ref: 'User',
   },
+  image: { type: String },
   classes: [{
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Class',

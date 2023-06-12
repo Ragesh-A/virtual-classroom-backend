@@ -2,6 +2,8 @@ const express = require('express');
 const { requireSignIn, classIsBlocked } = require('../middleware');
 const classes = require('../controllers/classesController');
 const multer = require('../utils/imageHelper');
+const assignmentRoute = require('./assignment.routes');
+const attendanceRoute = require('./attendance.routes');
 
 const router = express.Router();
 
@@ -13,7 +15,7 @@ router
   .post(
     multer.uploadClassBanner.single('image'),
     multer.classImageResize,
-    classes.createClass
+    classes.createClass,
   );
 // .patch(classes.updateClass)
 
@@ -32,8 +34,8 @@ router
   .route('/:classId/students')
   .get(classIsBlocked, classes.students)
   .delete(classIsBlocked, classes.removeStudent);
-// router.route('/:classId/assignments')
-//   .get('')
-//   .post('');b
+
+router.use('/:classId/assignments', assignmentRoute);
+router.use('/:classId/attendance', attendanceRoute);
 
 module.exports = router;

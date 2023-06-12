@@ -1,23 +1,24 @@
-const router = require('express').Router();
+const router = require('express').Router({ mergeParams: true });
 const controller = require('../controllers/assignmentController');
-const { requireSignIn } = require('../middleware');
+// const { requireSignIn } = require('../middleware');
+const { uploadAssignmentImage, uploadSubmissionImage } = require('../utils/imageHelper');
 
-router.use(requireSignIn);
-router.post('', controller.create);
-router.get('/:classId', controller.findByClass);
+router.route('/')
+  .get(controller.findByClass)
+  .post(uploadAssignmentImage.single('image'), controller.create);
+
 router
-  .route('/:classId/assignments/:assignmentId')
+  .route('/:assignmentId')
   .get(controller.getAssignment)
-  .patch(controller.updateOne);
+  .patch(uploadAssignmentImage.single('image'), controller.updateOne);
 
 router
-  .route('/:classId/assignments/:assignmentId/submissions')
+  .route('/:assignmentId/submissions')
   .get(controller.submissions)
-  .post(controller.createSubmission);
+  .post(uploadSubmissionImage.array('image'), controller.createSubmission);
 
 router
-  .route('/:classId/assignments/:assignmentId/submissions/:submissionId')
+  .route('/submissions/:submissionId')
   .get(controller.findOneSubmission);
-// .post
 
 module.exports = router;

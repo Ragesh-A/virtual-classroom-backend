@@ -8,12 +8,12 @@ const chatRoute = require('./chat.routes');
 const organizerRoute = require('./organizer.routes');
 const user = require('../controllers/userController');
 const messageRoute = require('./message.routes');
-const assignmentRoute = require('./assignment.routes');
+// const assignmentRoute = require('./assignment.routes');
 const subscriptionRoute = require('./subscription.routes');
 const { requireSignIn } = require('../middleware');
 
 router.use('/admin', adminRoute);
-router.use('/assignments', assignmentRoute);
+// router.use('/assignments', assignmentRoute);
 router.use('/auth', authRoute);
 router.use('/chat', chatRoute);
 router.use('/classes', classesRoute);

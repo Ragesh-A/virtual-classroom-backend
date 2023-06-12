@@ -1,21 +1,45 @@
+/* eslint-disable no-underscore-dangle */
 const Assignment = require('../models/assignment.schema');
 const Submissions = require('../models/submissionModel');
 
-exports.createAssignment = async (classes, title, description, dueDate, createdBy) => {
+exports.createAssignment = async (classes, title, description, dueDate, createdBy, image = '') => {
   const newAssignment = new Assignment({
     title,
     description,
     dueDate,
     createdBy,
     classes,
+    image,
   });
   await newAssignment.save();
   return newAssignment;
 };
 
-exports.allAssignments = async (classId) => {
+exports.allAssignments = async (classId, student, q) => {
   const assignments = await Assignment.find({ classes: classId });
-  return assignments;
+  const ids = assignments.map((assignment) => assignment._id);
+  const submissions = await Submissions.find({ student, assignmentId: { $in: ids } }).populate('assignmentId');
+
+  let result = [];
+  switch (q) {
+    case 'pending':
+      result = assignments.filter((assignment) => (!submissions.some((submission) => (
+        submission.assignmentId._id.toString() === assignment._id.toString())
+         && assignment.dueDate >= new Date())));
+      break;
+
+    case 'missed':
+      result = assignments.filter((assignment) => !submissions.some((submission) => (
+        submission.assignmentId._id.toString() === assignment._id.toString())));
+      break;
+
+    case 'completed':
+      result = submissions;
+      break;
+    default: result = assignments;
+  }
+
+  return result;
 };
 
 exports.getAssignment = async (_id) => {

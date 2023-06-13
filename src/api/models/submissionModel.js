@@ -14,9 +14,9 @@ const submissionSchema = new mongoose.Schema({
   answer: {
     type: String,
   },
-  image: {
+  image: [{
     type: String,
-  },
+  }],
 });
 
 module.exports = mongoose.model('Submissions', submissionSchema);

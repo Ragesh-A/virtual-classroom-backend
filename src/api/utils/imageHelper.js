@@ -5,8 +5,14 @@ const sharp = require('sharp');
 
 const classDestination = path.join(__dirname, '../../public/images/classroom');
 const profileDestination = path.join(__dirname, '../../public/images/profiles');
-const assignmentDestination = path.join(__dirname, '../../public/images/assignments');
-const submissionsDestination = path.join(__dirname, '../public/images/submissions');
+const assignmentDestination = path.join(
+  __dirname,
+  '../../public/images/assignments',
+);
+const submissionsDestination = path.join(
+  __dirname,
+  '../../public/images/submissions',
+);
 
 const classImageStorage = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -35,7 +41,10 @@ const assignmentStorage = multer.diskStorage({
   },
   filename: (req, file, cb) => {
     const extension = file.originalname.split('.').pop();
-    cb(null, `${req.body.classId}-${req.body.title.replace(/\s/g, '')}.${extension}`);
+    cb(
+      null,
+      `${req.body.classId}-${req.body.title.replace(/\s/g, '')}.${extension}`,
+    );
   },
 });
 
@@ -44,7 +53,6 @@ const submissionStorage = multer.diskStorage({
     cb(null, submissionsDestination);
   },
   filename: (req, file, cb) => {
-    console.log(file);
     const currentDate = new Date();
     const timestamp = currentDate.getTime();
     const originalName = file.originalname;
@@ -91,7 +99,10 @@ const profileResize = async (req, res, next) => {
 const uploadClassBanner = multer({ storage: classImageStorage });
 const uploadProfileImage = multer({ storage: profileImageStorage });
 const uploadAssignmentImage = multer({ storage: assignmentStorage });
-const uploadSubmissionImage = multer({ storage: submissionStorage, limits: { files: 5 } });
+const uploadSubmissionImage = multer({
+  storage: submissionStorage,
+  limits: { files: 5 },
+});
 
 module.exports = {
   profileResize,

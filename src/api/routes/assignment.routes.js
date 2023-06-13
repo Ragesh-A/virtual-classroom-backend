@@ -15,7 +15,7 @@ router
 router
   .route('/:assignmentId/submissions')
   .get(controller.submissions)
-  .post(uploadSubmissionImage.array('image'), controller.createSubmission);
+  .post(uploadSubmissionImage.array('images'), controller.createSubmission);
 
 router
   .route('/submissions/:submissionId')

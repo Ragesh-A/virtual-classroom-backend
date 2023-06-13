@@ -12,7 +12,7 @@ const assignmentSchema = new mongoose.Schema({
     trim: true,
   },
   dueDate: {
-    type: Date,
+    type: String,
     required: true,
   },
   createdBy: {

@@ -79,10 +79,15 @@ exports.createSubmission = async (req, res) => {
     const { assignmentId } = req.params;
     const { _id } = req.user;
     const { answer } = req.body;
+    let images;
+    if (req.files) {
+      images = req.files;
+    }
     const isSubmitted = await services.createSubmission(
       _id,
       assignmentId,
       answer,
+      images,
     );
     res.json({ success: isSubmitted });
   } catch (error) {

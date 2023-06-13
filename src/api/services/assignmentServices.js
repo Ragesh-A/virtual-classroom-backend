@@ -24,8 +24,7 @@ exports.allAssignments = async (classId, student, q) => {
   switch (q) {
     case 'pending':
       result = assignments.filter((assignment) => (!submissions.some((submission) => (
-        submission.assignmentId._id.toString() === assignment._id.toString())
-         && assignment.dueDate >= new Date())));
+        submission.assignmentId._id.toString() === assignment._id.toString()))));
       break;
 
     case 'missed':

@@ -29,6 +29,6 @@ const chatSchema = new mongoose.Schema(
   { timestamps: true },
 );
 
-chatSchema.index({ users: 1, class: 1 }, { unique: true });
+// chatSchema.index({ users: 1, class: 1 }, { unique: true });
 
 module.exports = mongoose.model('Chat2', chatSchema);

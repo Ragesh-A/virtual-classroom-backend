@@ -42,7 +42,7 @@ exports.accessChat = async (req, res) => {
     const isChat = await services.findOne(classId, _id, receiverId);
     res.json({ success: isChat });
   } catch (error) {
-    res.json({ error });
+    res.json({ error: error.message });
   }
 };
 
@@ -53,7 +53,7 @@ exports.allChats = async (req, res) => {
     const chats = await services.find(_id, classId);
     res.json({ success: { chats } });
   } catch (error) {
-    res.json({ error });
+    res.json({ error: error.message });
   }
 };
 
@@ -61,11 +61,11 @@ exports.createGroup = async (req, res) => {
   try {
     const { classId } = req.params;
     const { _id } = req.user;
-    const { groupName, users } = req.body;
-    const group = await services.newGroup(classId, _id, groupName, users);
+    const { chatName, users } = req.body;
+    const group = await services.newGroup(classId, _id, chatName, users);
     res.json({ success: { group } });
   } catch (error) {
-    res.json({ error });
+    res.json({ error: error.message });
   }
 };
 

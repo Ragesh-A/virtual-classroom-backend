@@ -17,4 +17,4 @@ const messageSchema = new mongoose.Schema({
   readyBy: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
 }, { timestamps: true });
 
-module.exports = mongoose.model('Message2', messageSchema);
+module.exports = mongoose.model('Message', messageSchema);

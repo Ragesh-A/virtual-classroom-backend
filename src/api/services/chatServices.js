@@ -50,9 +50,9 @@ exports.findOne = async (classId, userId, receiverId) => {
   return newChat;
 };
 
-exports.find = async (classId, userId) => {
+exports.find = async (userId, classId) => {
   const chats = await Chat.find({
-    $and: [{ users: { $elemMatch: { $eq: userId } } }, { class: classId }],
+    class: classId, $or: [{ users: userId }, { groupAdmin: userId }],
   })
     .populate(populateOption)
     .populate('groupAdmin', '-password -uuid -isAdmin')
@@ -67,10 +67,10 @@ exports.newGroup = async (classId, _id, chatName, users = []) => {
     isGroup: true,
     users,
     groupAdmin: _id,
+    class: classId,
   });
   await newGroup.save();
-  await newGroup.populate(populateOption)
-    .populate('groupAdmin', '-password -uuid -isAdmin');
+  await Chat.populate(newGroup, [{ path: 'groupAdmin', select: '-password -uuid -isAdmin' }]);
 
   return newGroup;
 };

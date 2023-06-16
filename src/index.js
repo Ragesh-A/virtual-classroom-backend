@@ -46,7 +46,7 @@ connectDB()
     });
 
     io.on('connection', (socket) => {
-      console.log('connected');
+      // console.log('connected');
 
       socket.on('setup', (userData) => {
         if (userData?._id) {
@@ -57,18 +57,32 @@ connectDB()
 
       socket.on('join-chat', (room) => {
         socket.join(room);
-        console.log(room, 'joined room');
+        // console.log(room, 'joined room');
       });
+
+      socket.on('typing', (roomId) => {
+        console.log(roomId);
+        socket.in(roomId).emit('typing', roomId);
+      });
+      socket.on('stop-typing', (roomId) => socket.in(roomId).emit('stop-typing'));
 
       socket.on('new-message', (newMessageReceived) => {
         const { chat } = newMessageReceived;
-        if (!chat?.users) return console.log('no users');
-        chat.users.forEach((user) => {
-          if (user._id !== newMessageReceived.sender._id) {
-            socket.to(user?._id).emit('message-received', newMessageReceived);
-          }
+        if (chat?.users) {
+          chat.users.forEach((user) => {
+            if (user._id !== newMessageReceived.sender._id) {
+              socket.to(user?._id).emit('message-received', newMessageReceived);
+            }
+          });
+        }
+      });
+
+      socket.on('disconnect', () => {
+        socket.rooms.forEach((room) => {
+          socket.leave(room);
         });
       });
+      console.log(socket.rooms);
     });
   })
   .catch((error) => {

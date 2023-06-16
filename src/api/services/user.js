@@ -7,7 +7,7 @@ exports.findUserByEmailOrPhone = async (emailOrPhone) => {
 };
 
 exports.getUser = async (userId) => {
-  const user = await User.findOne({ _id: userId }, { password: 0, isAdmin: 0, uuid: 0 });
+  const user = await User.findOne({ _id: userId }, { password: 0, uuid: 0 });
   if (!user) throw new Error('no user found');
   return user;
 };

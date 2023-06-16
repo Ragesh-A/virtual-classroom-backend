@@ -39,3 +39,39 @@ exports.classSchema = Joi.object({
   image: Joi.string().min(0),
   instructor: Joi.string().min(0),
 });
+
+exports.announcementData = Joi.object({
+  title: Joi.string().required().min(5).max(15)
+    .messages({
+      'string.base': 'Title must be string',
+      'string.empty': 'Title is required',
+      'string.min': 'Title must be at least {#limit} character',
+      'string.max': 'Title must not exceed {#limit} character',
+    }),
+  description: Joi.string().required().min(5).max(50)
+    .messages({
+      'string.base': 'Description must be string',
+      'string.empty': 'Description is required',
+      'string.min': 'Description must be at least {#limit} characters',
+    }),
+  classes: Joi.array().items(Joi.string().required())
+    .messages({
+      'array.base': 'Classes must be an array',
+      'array.empty': 'At least one class is required',
+    }),
+  icon: Joi.string().required().trim()
+    .messages({
+      'string.base': 'Icon must be a string',
+      'string.empty': 'Icon is required',
+    }),
+  announceAt: Joi.date().required()
+    .messages({
+      'date.base': 'AnnounceAt must be a valid date',
+      'date.empty': 'AnnounceAt is required',
+    }),
+  theme: Joi.string().required().messages({
+    'string.base': 'Theme must be string',
+    'string.empty': 'Theme is required',
+  }),
+  action: Joi.string().min(0),
+});

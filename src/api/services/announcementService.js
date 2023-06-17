@@ -36,9 +36,7 @@ exports.allAnnouncements = async (userId) => {
 };
 
 exports.getAnnouncement = async (_id) => {
-  console.log(_id);
   const announcement = await Announcement.findOne({ _id }).populate('classes');
-  console.log(announcement);
   if (!announcement) throw new Error('No such announcements');
   return announcement;
 };

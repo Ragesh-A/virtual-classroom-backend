@@ -139,3 +139,5 @@ exports.classSubscription = async (createdBy, status = false) => {
   const isUpdated = Classes.updateMany({ createdBy }, { $set: { subscription: status } });
   return isUpdated;
 };
+
+exports.classesByUser = async (userId) => Enrolment.find({ students: userId }).populate('classId');

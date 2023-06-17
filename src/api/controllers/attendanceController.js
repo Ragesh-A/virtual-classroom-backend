@@ -20,3 +20,13 @@ exports.createAttendance = async (req, res) => {
     res.json({ error: { error } });
   }
 };
+
+exports.getAttendances = async (req, res) => {
+  try {
+    const { classId } = req.params;
+    const attendances = await service.getAttendances(classId);
+    res.json({ success: { attendances } });
+  } catch (error) {
+    res.json({ error: error.message });
+  }
+};

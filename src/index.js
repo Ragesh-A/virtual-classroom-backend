@@ -25,7 +25,7 @@ app.use('/api', indexRoute);
 app.use('*', (req, res) => {
   res
     .status(404)
-    .json({ message: 'The requested path was not found on the server.' });
+    .json({ error: 'The requested path was not found on the server.' });
 });
 
 app.use(notFound);

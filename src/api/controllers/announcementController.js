@@ -39,3 +39,33 @@ exports.getAnnouncements = async (req, res) => {
     res.json({ error: error.message });
   }
 };
+
+exports.allAnnouncements = async (req, res) => {
+  try {
+    const { _id } = req.user;
+    const announcements = await announcementService.allAnnouncements(_id);
+    res.json({ success: { announcements } });
+  } catch (error) {
+    res.json({ error: error.message });
+  }
+};
+
+exports.getAnnouncement = async (req, res) => {
+  try {
+    const { announcementId } = req.params;
+    const announcement = await announcementService.getAnnouncement(announcementId);
+    res.json({ success: { announcement } });
+  } catch (error) {
+    res.json({ error: error.message });
+  }
+};
+
+exports.updateAnnouncement = async (req, res) => {
+  try {
+    const announcement = await announcementService.updateAnnouncement(req.body);
+    res.json({ success: { announcement } });
+  } catch (error) {
+    console.log(error);
+    res.json({ error: error.message });
+  }
+};

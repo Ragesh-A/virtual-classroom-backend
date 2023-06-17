@@ -29,3 +29,9 @@ exports.takeAttendance = async (classId, payload) => {
   await newAttendance.save();
   return { message: 'Attendance taken successfully' };
 };
+
+exports.getAttendances = async (classId) => {
+  const attendances = await Attendance.find({ class: classId });
+  if (!attendances) return [];
+  return attendances;
+};

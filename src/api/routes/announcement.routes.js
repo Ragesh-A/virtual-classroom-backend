@@ -8,4 +8,9 @@ router.route('')
   .get(controller.getAnnouncements)
   .post(controller.createAnnouncement);
 
+router.get('/all', controller.allAnnouncements);
+router.route('/:announcementId')
+  .get(controller.getAnnouncement)
+  .patch(controller.updateAnnouncement);
+
 module.exports = router;

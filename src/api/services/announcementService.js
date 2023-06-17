@@ -24,3 +24,26 @@ exports.createAnnouncement = async (user, data) => {
   await newAnnouncement.save();
   return newAnnouncement;
 };
+
+exports.allAnnouncements = async (userId) => {
+  const allClasses = await classService.getAllUserClasses(userId);
+  if (!allClasses || allClasses.length < 1) return [];
+  const classIds = allClasses.map(({ _id }) => _id);
+  const announcements = await Announcement.find({ classes: { $in: classIds } })
+    .populate('classes');
+  if (!announcements) return [];
+  return announcements;
+};
+
+exports.getAnnouncement = async (_id) => {
+  console.log(_id);
+  const announcement = await Announcement.findOne({ _id }).populate('classes');
+  console.log(announcement);
+  if (!announcement) throw new Error('No such announcements');
+  return announcement;
+};
+
+exports.updateAnnouncement = async (payload) => {
+  const isUpdated = await Announcement.updateOne(payload);
+  return isUpdated;
+};

@@ -20,6 +20,8 @@ router
   );
 // .patch(classes.updateClass)
 
+router.get('/as-student', classes.asStudentClasses);
+
 router
   .route('/join')
   .post(classes.requestToClass)

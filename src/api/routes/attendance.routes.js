@@ -4,6 +4,8 @@ const controller = require('../controllers/attendanceController');
 router.route('/')
   .get(controller.todayAttendance)
   .post(controller.createAttendance);
-//   .patch(controller.updateAttendance);
 
+router.route('/class')
+  .get(controller.getAttendances);
+// .post()
 module.exports = router;

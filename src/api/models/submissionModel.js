@@ -17,6 +17,11 @@ const submissionSchema = new mongoose.Schema({
   image: [{
     type: String,
   }],
+  timeTaken: {
+    type: String,
+  },
+  totalScore: { type: Number },
+  scoreEarned: { type: Number },
 });
 
 module.exports = mongoose.model('Submissions', submissionSchema);

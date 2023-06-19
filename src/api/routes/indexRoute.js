@@ -11,6 +11,7 @@ const user = require('../controllers/userController');
 const messageRoute = require('./message.routes');
 // const assignmentRoute = require('./assignment.routes');
 const subscriptionRoute = require('./subscription.routes');
+const questionsRoute = require('./questions.routes');
 const { requireSignIn } = require('../middleware');
 
 router.use('/admin', adminRoute);
@@ -22,6 +23,7 @@ router.use('/classes', classesRoute);
 router.use('/message', messageRoute);
 router.use('/organizer', organizerRoute);
 router.get('/profile', requireSignIn, user.profile);
+router.use('/questions', questionsRoute);
 router.use('/subscription', subscriptionRoute);
 
 module.exports = router;

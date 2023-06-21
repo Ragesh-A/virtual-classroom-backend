@@ -9,5 +9,7 @@ router.route('/:questionId')
   .get(questionsController.getQuestion);
 router.route('/:questionId/submission')
   .post(questionsController.createSubmission);
+router.route('/:questionId/isSubmitted')
+  .get(questionsController.isSubmitted);
 
 module.exports = router;

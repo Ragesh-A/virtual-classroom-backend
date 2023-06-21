@@ -19,3 +19,14 @@ exports.organizationDashboard = async (req, res) => {
     res.json({ error: error.message });
   }
 };
+
+exports.classDashboard = async (req, res) => {
+  try {
+    const { classId } = req.query;
+    const data = await analyticsServices.classDashboard(classId);
+    res.json({ success: { data } });
+  } catch (error) {
+    console.log(error);
+    res.json({ error: error.message });
+  }
+};

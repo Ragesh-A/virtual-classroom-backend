@@ -17,7 +17,7 @@ exports.create = async (req, res) => {
 exports.getClassQuestions = async (req, res) => {
   try {
     const { classId } = req.query;
-    const questions = await questionsServices.allClassQuestions(classId);
+    const questions = (await questionsServices.allClassQuestions(classId));
     res.status(200).json({ success: { questions } });
   } catch (error) {
     res.json({ error: error.message });
@@ -64,5 +64,16 @@ exports.updateSubmission = async (req, res) => {
     res.status(200).json({ success: { submission } });
   } catch (error) {
     res.json({ error: error.message });
+  }
+};
+
+exports.isSubmitted = async (req, res) => {
+  try {
+    const { _id } = req.user;
+    const { questionId } = req.params;
+    const isSubmitted = await questionsServices.isSubmitted(_id, questionId);
+    res.json({ success: { isSubmitted } });
+  } catch (error) {
+    res.json({});
   }
 };

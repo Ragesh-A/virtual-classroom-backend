@@ -18,7 +18,7 @@ exports.create = async (userId, classId, title, description, questions, dueDate)
 
 exports.allClassQuestions = async (classId) => {
   if (!classId) throw new Error('Missing query');
-  return QuestionsModel.find({ class: classId });
+  return QuestionsModel.find({ class: classId }).sort({ createdAt: 1 });
 };
 
 exports.getQuestion = async (questionId) => {
@@ -48,4 +48,10 @@ exports.getSubmission = async (assignmentId) => {
   const submission = await SubmissionModel.findById(assignmentId);
   if (!submission) throw new Error('No such submission found');
   return submission;
+};
+
+exports.isSubmitted = async (userId, questionId) => {
+  const submission = await SubmissionModel.findOne({ assignmentId: questionId, student: userId });
+  if (submission) return true;
+  return false;
 };

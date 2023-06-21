@@ -40,9 +40,19 @@ exports.getAnnouncements = async (req, res) => {
   }
 };
 
+exports.getAllClassAnnouncements = async (req, res) => {
+  try {
+    const { classId } = req.params;
+    const announcements = await announcementService.getAllClassAnnouncements(classId);
+    res.json({ success: { announcements } });
+  } catch (error) {
+    res.json({ error: error.message });
+  }
+};
+
 exports.allAnnouncements = async (req, res) => {
   try {
-    const { _id } = req.user;
+    const { _id } = req.para;
     const announcements = await announcementService.allAnnouncements(_id);
     res.json({ success: { announcements } });
   } catch (error) {
@@ -64,6 +74,17 @@ exports.updateAnnouncement = async (req, res) => {
   try {
     const announcement = await announcementService.updateAnnouncement(req.body);
     res.json({ success: { announcement } });
+  } catch (error) {
+    console.log(error);
+    res.json({ error: error.message });
+  }
+};
+
+exports.deleteAnnouncement = async (req, res) => {
+  try {
+    const { announcementId } = req.params;
+    const isDeleted = await announcementService.deleteAnnouncement(announcementId);
+    res.json({ success: isDeleted });
   } catch (error) {
     console.log(error);
     res.json({ error: error.message });

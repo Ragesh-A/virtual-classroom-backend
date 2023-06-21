@@ -8,9 +8,9 @@ router.route('')
   .get(controller.getAnnouncements)
   .post(controller.createAnnouncement);
 
-router.get('/all', controller.allAnnouncements);
+router.get('/class/:classId/all', controller.getAllClassAnnouncements);
 router.route('/:announcementId')
   .get(controller.getAnnouncement)
-  .patch(controller.updateAnnouncement);
-
+  .patch(controller.updateAnnouncement)
+  .delete(controller.deleteAnnouncement);
 module.exports = router;

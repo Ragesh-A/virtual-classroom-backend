@@ -1,12 +1,24 @@
 const Announcement = require('../models/announcement');
 const classService = require('./classes');
 
-exports.getAnnouncementsByClass = async (classId) => Announcement.find({ classes: classId });
+exports.getAnnouncementsByClass = async (classId) => {
+  const today = new Date().toISOString().split('T')[0];
+  return Announcement.find({ classes: classId, announceAt: today });
+};
 
 exports.getAnnouncementsByUser = async (user) => {
   let classes = await classService.getAllUserClasses(user);
   classes = classes.map(({ _id }) => _id);
-  const announcements = await Announcement.find({ classes: { $in: classes } });
+  const today = new Date().toISOString().toString().split('T')[0];
+  const announcements = await Announcement.aggregate([
+    { $match: { classes: { $in: classes }, announceAt: today } },
+    { $unwind: '$classes' },
+    {
+      $lookup: {
+        from: 'classes', localField: 'classes', foreignField: '_id', as: 'class',
+      },
+    },
+  ]);
   return announcements;
 };
 
@@ -44,4 +56,11 @@ exports.getAnnouncement = async (_id) => {
 exports.updateAnnouncement = async (payload) => {
   const isUpdated = await Announcement.updateOne(payload);
   return isUpdated;
+};
+
+exports.getAllClassAnnouncements = async (classId) => Announcement.find({ classes: classId });
+
+exports.deleteAnnouncement = async (announcementId) => {
+  await Announcement.deleteOne({ _id: announcementId });
+  return true;
 };

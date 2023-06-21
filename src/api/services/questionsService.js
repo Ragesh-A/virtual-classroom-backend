@@ -29,7 +29,7 @@ exports.getQuestion = async (questionId) => {
 
 exports.submitAnswer = async (questionId, student, answer, timeTaken) => {
   if (!answer) throw new Error('Submission not possible without answer');
-  const isSubmitted = await SubmissionModel.find({ assignmentId: questionId, student });
+  const isSubmitted = await SubmissionModel.findOne({ assignmentId: questionId, student });
   if (isSubmitted) throw new Error('user already submitted');
   const stringifiedAnswer = JSON.stringify(answer);
   const newSubmission = new SubmissionModel({

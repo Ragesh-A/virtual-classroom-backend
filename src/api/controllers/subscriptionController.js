@@ -27,7 +27,7 @@ exports.createSubscription = async (req, res) => {
     const {
       paymentIntent, paymentIntentClientSecret, redirectStatus, plan = 'monthly',
     } = req.body;
-
+    console.log(paymentIntent);
     const isCreated = await services
       .createSubscription(_id, plan, paymentIntent, paymentIntentClientSecret, redirectStatus);
 

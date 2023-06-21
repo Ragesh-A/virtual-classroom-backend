@@ -5,6 +5,7 @@ const Organization = require('../models/organization');
 const User = require('../models/user');
 const { createOrganization } = require('./organizer');
 const { classSubscription } = require('./classes');
+const SubscriptionModel = require('../models/subscriptionModel');
 
 exports.findSubscribers = async () => {
   const subscribers = await User.find({ subscriber: true }, { password: 0 });
@@ -105,6 +106,16 @@ exports.createSubscription = async (
   if (!updatedUser) {
     throw new Error('Something went wrong');
   }
+
+  // creation of subscription doc
+  const newSubscription = new SubscriptionModel({
+    user: _id,
+    amount: plan === 'yearly' ? 100 : 10,
+    paymentIntent,
+    plan,
+  });
+
+  await newSubscription.save();
 
   return updatedUser;
 };

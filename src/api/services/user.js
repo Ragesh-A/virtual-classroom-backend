@@ -28,3 +28,19 @@ exports.blockOrUnblock = async (userId) => {
   }
   throw new Error(`failed to ${action ? 'block' : 'unblock'} the user`);
 };
+
+exports.updateProfile = async (user, name, image) => {
+  const updateFields = { name };
+
+  if (image !== '') {
+    updateFields.avatar = image;
+  }
+
+  const updatedUser = await User.findOneAndUpdate(
+    { _id: user },
+    { $set: updateFields },
+    { upsert: true, new: true },
+  );
+
+  return updatedUser;
+};

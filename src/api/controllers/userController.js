@@ -28,3 +28,19 @@ exports.blockOrUnblock = async (req, res) => {
     res.json({ error: error.message });
   }
 };
+
+exports.updateProfile = async (req, res) => {
+  try {
+    const { _id } = req.user;
+    const { name } = req.body;
+    let image = '';
+    if (req?.file) {
+      image = req?.file?.filename;
+    }
+    const user = await userService.updateProfile(_id, name, image);
+    res.json({ success: { user } });
+  } catch (error) {
+    console.log(error);
+    res.json({ error: error.message });
+  }
+};

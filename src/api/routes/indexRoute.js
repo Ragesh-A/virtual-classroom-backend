@@ -14,6 +14,7 @@ const messageRoute = require('./message.routes');
 const subscriptionRoute = require('./subscription.routes');
 const questionsRoute = require('./questions.routes');
 const { requireSignIn } = require('../middleware');
+const { uploadProfileImage } = require('../utils/imageHelper');
 
 router.use('/admin', adminRoute);
 // router.use('/assignments', assignmentRoute);
@@ -25,6 +26,7 @@ router.use('/classes', classesRoute);
 router.use('/message', messageRoute);
 router.use('/organizer', organizerRoute);
 router.get('/profile', requireSignIn, user.profile);
+router.patch('/profile', requireSignIn, uploadProfileImage.single('avatar'), user.updateProfile);
 router.use('/questions', questionsRoute);
 router.use('/subscription', subscriptionRoute);
 

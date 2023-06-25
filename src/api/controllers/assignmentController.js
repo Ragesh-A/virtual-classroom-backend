@@ -109,7 +109,7 @@ exports.submissions = async (req, res) => {
 exports.findOneSubmission = async (req, res) => {
   try {
     const { submissionId } = req.params;
-    const submission = await services.findBySubmissionId(submissionId);
+    const submission = (await services.findBySubmissionId(submissionId));
     res.json({ success: { submission } });
   } catch (error) {
     res.json({ error: error.message });

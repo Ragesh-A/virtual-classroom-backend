@@ -54,13 +54,14 @@ exports.update = async (_id, payload) => {
 };
 
 exports.allSubmissions = async (classId, assignmentId) => {
-  let submissions = await Submissions.find({ assignmentId }).populate({ path: 'student', select: '-password' });
+  let submissions = await Submissions.find({ assignmentId }).populate('assignmentId').populate({ path: 'student', select: '-password' });
   if (!submissions) submissions = [];
   return submissions;
 };
 
 exports.findBySubmissionId = async (_id) => {
-  const submission = await Submissions.findOne({ _id });
+  const submission = await Submissions.findOne({ _id })
+    .populate('assignmentId').populate('student', '-password -uuid');
   if (!submission) throw new Error('could not find the submission');
   return submission;
 };

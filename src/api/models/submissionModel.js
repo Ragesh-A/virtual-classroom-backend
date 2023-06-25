@@ -20,8 +20,13 @@ const submissionSchema = new mongoose.Schema({
   timeTaken: {
     type: String,
   },
+  accepted: {
+    type: String,
+    enum: ['pending', 'accepted', 'rejected'],
+    default: 'pending',
+  },
   totalScore: { type: Number },
   scoreEarned: { type: Number },
-});
+}, { timestamps: true });
 
 module.exports = mongoose.model('Submissions', submissionSchema);

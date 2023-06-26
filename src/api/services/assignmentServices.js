@@ -80,3 +80,9 @@ exports.createSubmission = async (student, assignmentId, answer, images) => {
   const isSubmitted = await newSubmission.save();
   return isSubmitted;
 };
+
+exports.updateSubmission = async (_id, payload) => {
+  const updatedSubmission = await Submissions.findOneAndUpdate({ _id }, payload, { new: true });
+  console.log(updatedSubmission);
+  return updatedSubmission;
+};

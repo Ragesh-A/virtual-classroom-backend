@@ -19,6 +19,7 @@ router
 
 router
   .route('/submissions/:submissionId')
-  .get(controller.findOneSubmission);
+  .get(controller.findOneSubmission)
+  .patch(controller.updateSubmission);
 
 module.exports = router;

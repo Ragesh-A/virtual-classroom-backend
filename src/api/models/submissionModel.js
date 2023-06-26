@@ -25,6 +25,9 @@ const submissionSchema = new mongoose.Schema({
     enum: ['pending', 'accepted', 'rejected'],
     default: 'pending',
   },
+  response: {
+    type: String,
+  },
   totalScore: { type: Number },
   scoreEarned: { type: Number },
 }, { timestamps: true });

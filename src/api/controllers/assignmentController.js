@@ -115,3 +115,14 @@ exports.findOneSubmission = async (req, res) => {
     res.json({ error: error.message });
   }
 };
+
+exports.updateSubmission = async (req, res) => {
+  try {
+    const { body } = req;
+    const { submissionId } = req.params;
+    const submission = await services.updateSubmission(submissionId, body);
+    res.json({ success: { submission } });
+  } catch (error) {
+    res.json({ error: error.message });
+  }
+};

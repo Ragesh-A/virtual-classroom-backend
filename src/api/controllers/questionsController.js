@@ -3,11 +3,11 @@ const questionsServices = require('../services/questionsService');
 exports.create = async (req, res) => {
   try {
     const {
-      classId, title, description, questions, date,
+      classId, title, description, questions, date, startTime, endTime, type,
     } = req.body;
     const { _id } = req.user;
     const newQuestion = await questionsServices
-      .create(_id, classId, title, description, questions, date);
+      .create(_id, classId, title, description, questions, date, startTime, endTime, type);
     res.status(201).json({ success: { newQuestion } });
   } catch (error) {
     res.json({ error: error.message });
@@ -72,8 +72,18 @@ exports.isSubmitted = async (req, res) => {
     const { _id } = req.user;
     const { questionId } = req.params;
     const isSubmitted = await questionsServices.isSubmitted(_id, questionId);
-    res.json({ success: { isSubmitted } });
+    res.status(200).json({ success: { isSubmitted } });
   } catch (error) {
     res.json({});
+  }
+};
+
+exports.questUserCreatedQuestion = async (req, res) => {
+  try {
+    const { _id } = req.user;
+    const questions = await questionsServices.allCreatedQuestion(_id);
+    res.status(200).json({ success: { questions } });
+  } catch (error) {
+    res.json({ error: error.message });
   }
 };

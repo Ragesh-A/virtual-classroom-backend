@@ -73,3 +73,12 @@ exports.deleteAnnouncement = async (announcementId) => {
   await Announcement.deleteOne({ _id: announcementId });
   return true;
 };
+
+exports.getAnnouncementsByOrganization = async (userId) => {
+  const classes = await classService.findAllCreatedClass(userId);
+  const classIds = classes.map(({ _id }) => _id);
+  const allAnnouncements = await Announcement.find(
+    { classes: { $in: classIds } },
+  ).populate('classes');
+  return allAnnouncements;
+};

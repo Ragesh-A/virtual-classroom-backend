@@ -8,6 +8,12 @@ const questionsSchema = new mongoose.Schema(
       required: true,
       trim: true,
     },
+    type: {
+      type: String,
+      enum: ['exam', 'quiz'],
+      required: true,
+      trim: true,
+    },
     class: [
       {
         type: mongoose.Schema.Types.ObjectId,
@@ -16,6 +22,18 @@ const questionsSchema = new mongoose.Schema(
         trim: true,
       },
     ],
+    date: {
+      type: String,
+      required: true,
+    },
+    startTime: {
+      type: String,
+      required: true,
+    },
+    endTime: {
+      type: String,
+      required: true,
+    },
     title: {
       type: String,
       required: true,
@@ -28,10 +46,6 @@ const questionsSchema = new mongoose.Schema(
     },
     questions: {
       type: Array,
-      required: true,
-    },
-    date: {
-      type: String,
       required: true,
     },
   },

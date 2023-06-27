@@ -31,6 +31,7 @@ exports.getAnnouncements = async (req, res) => {
     switch (by) {
       case 'user': announcements = await announcementService.getAnnouncementsByUser(_id); break;
       case 'class': announcements = await announcementService.getAnnouncementsByClass(value); break;
+      case 'organization': announcements = await announcementService.getAnnouncementsByOrganization(_id); break;
       default: announcements = [];
     }
     res.json({ success: { announcements } });

@@ -4,6 +4,7 @@ const questionsController = require('../controllers/questionsController');
 
 router.use(requireSignIn);
 router.get('', questionsController.getClassQuestions);
+router.get('/organization', questionsController.questUserCreatedQuestion);
 router.post('', questionsController.create);
 router.route('/:questionId')
   .get(questionsController.getQuestion);

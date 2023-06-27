@@ -1,7 +1,17 @@
 const QuestionsModel = require('../models/questions');
 const SubmissionModel = require('../models/submissionModel');
 
-exports.create = async (userId, classId, title, description, questions, dueDate) => {
+exports.create = async (
+  userId,
+  classId,
+  title,
+  description,
+  questions,
+  dueDate,
+  startTime,
+  endTime,
+  type,
+) => {
   const date = new Date(dueDate);
   const formatted = date.toISOString().split('T')[0];
   const newQuestions = new QuestionsModel({
@@ -11,6 +21,9 @@ exports.create = async (userId, classId, title, description, questions, dueDate)
     description,
     questions,
     date: formatted,
+    startTime,
+    endTime,
+    type,
   });
   await newQuestions.save();
   return newQuestions;
@@ -29,8 +42,10 @@ exports.getQuestion = async (questionId) => {
 
 exports.submitAnswer = async (questionId, student, answer, timeTaken) => {
   if (!answer) throw new Error('Submission not possible without answer');
-  const isSubmitted = await SubmissionModel
-    .findOne({ assignmentId: questionId, student });
+  const isSubmitted = await SubmissionModel.findOne({
+    assignmentId: questionId,
+    student,
+  });
 
   if (isSubmitted) throw new Error('user already submitted');
   const stringifiedAnswer = JSON.stringify(answer);
@@ -54,7 +69,17 @@ exports.getSubmission = async (assignmentId) => {
 };
 
 exports.isSubmitted = async (userId, questionId) => {
-  const submission = await SubmissionModel.findOne({ assignmentId: questionId, student: userId });
+  const submission = await SubmissionModel.findOne({
+    assignmentId: questionId,
+    student: userId,
+  });
   if (submission) return true;
   return false;
+};
+
+exports.allCreatedQuestion = async (user) => {
+  const questions = await QuestionsModel.find({ createdBy: user })
+    .populate('class')
+    .sort({ createdAt: -1 });
+  return questions;
 };

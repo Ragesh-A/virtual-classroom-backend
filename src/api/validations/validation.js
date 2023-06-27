@@ -41,14 +41,14 @@ exports.classSchema = Joi.object({
 });
 
 exports.announcementData = Joi.object({
-  title: Joi.string().required().min(5).max(15)
+  title: Joi.string().required().min(5).max(25)
     .messages({
       'string.base': 'Title must be string',
       'string.empty': 'Title is required',
       'string.min': 'Title must be at least {#limit} character',
       'string.max': 'Title must not exceed {#limit} character',
     }),
-  description: Joi.string().required().min(5).max(50)
+  description: Joi.string().required().min(5).max(250)
     .messages({
       'string.base': 'Description must be string',
       'string.empty': 'Description is required',

@@ -10,14 +10,12 @@ const chatRoute = require('./chat.routes');
 const organizerRoute = require('./organizer.routes');
 const user = require('../controllers/userController');
 const messageRoute = require('./message.routes');
-// const assignmentRoute = require('./assignment.routes');
 const subscriptionRoute = require('./subscription.routes');
 const questionsRoute = require('./questions.routes');
 const { requireSignIn } = require('../middleware');
 const { uploadProfileImage } = require('../utils/imageHelper');
 
 router.use('/admin', adminRoute);
-// router.use('/assignments', assignmentRoute);
 router.use('/analytics', analyticsRoute);
 router.use('/announcement', announcementRoute);
 router.use('/auth', authRoute);

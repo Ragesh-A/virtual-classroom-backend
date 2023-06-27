@@ -58,7 +58,16 @@ exports.updateAnnouncement = async (payload) => {
   return isUpdated;
 };
 
-exports.getAllClassAnnouncements = async (classId) => Announcement.find({ classes: classId });
+exports.getAllClassAnnouncements = async (classId) => {
+  const today = new Date();
+  today.setUTCHours(0, 0, 0, 0);
+  const threeDaysAgo = new Date(today);
+  threeDaysAgo.setDate(today.getDate() - 3);
+  const deleteQuery = { classes: classId, announceAt: { $lt: threeDaysAgo.toISOString().split('T')[0] } };
+  await Announcement.deleteMany(deleteQuery);
+  const allAnnouncements = await Announcement.find({ classes: classId });
+  return allAnnouncements;
+};
 
 exports.deleteAnnouncement = async (announcementId) => {
   await Announcement.deleteOne({ _id: announcementId });

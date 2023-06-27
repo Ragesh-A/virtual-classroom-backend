@@ -12,7 +12,7 @@ require('dotenv').config();
 
 const PORT = process.env.PORT || 8000;
 const { REACT_IP } = process.env;
-const indexRoute = require('./api/routes/indexRoute');
+const indexRoute = require('./api/routes/index.routes');
 
 const app = express();
 
@@ -46,8 +46,6 @@ connectDB()
     });
 
     io.on('connection', (socket) => {
-      // console.log('connected');
-
       socket.on('setup', (userData) => {
         if (userData?._id) {
           socket.join(userData?._id);

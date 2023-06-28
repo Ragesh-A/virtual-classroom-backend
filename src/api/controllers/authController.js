@@ -14,7 +14,7 @@ exports.signup = async (req, res) => {
     const uuid = generateUid();
     const user = await registerUser(value, uuid);
     if (!user) throw user;
-    // await mail.sendVerification(user);
+    await mail.sendVerification(user);
     res.json({ success: 'verification mail sended' });
   } catch (error) {
     res.json({ error: error.message });
@@ -31,7 +31,6 @@ exports.login = async (req, res) => {
     user = filterUserData(user);
     res.json({ success: { authentication: token, user } });
   } catch (error) {
-    console.log(error);
     res.json({ error: error.message });
   }
 };

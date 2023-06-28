@@ -1,3 +1,4 @@
+const QuestionSubmission = require('../models/QuestionSubmission');
 const QuestionsModel = require('../models/questions');
 const SubmissionModel = require('../models/submissionModel');
 
@@ -31,7 +32,7 @@ exports.create = async (
 
 exports.allClassQuestions = async (classId) => {
   if (!classId) throw new Error('Missing query');
-  return QuestionsModel.find({ class: classId }).sort({ createdAt: 1 });
+  return QuestionsModel.find({ class: classId }).sort({ createdAt: -1 });
 };
 
 exports.getQuestion = async (questionId) => {
@@ -42,24 +43,23 @@ exports.getQuestion = async (questionId) => {
 
 exports.submitAnswer = async (questionId, student, answer, timeTaken) => {
   if (!answer) throw new Error('Submission not possible without answer');
-  const isSubmitted = await SubmissionModel.findOne({
-    assignmentId: questionId,
-    student,
+  if (!questionId) throw new Error('Question is is missing')
+  const isSubmitted = await QuestionSubmission.findOne({
+    question: questionId, student
   });
 
   if (isSubmitted) throw new Error('user already submitted');
-  const stringifiedAnswer = JSON.stringify(answer);
-  const newSubmission = new SubmissionModel({
-    assignmentId: questionId,
-    student,
-    answer: stringifiedAnswer,
-    timeTaken,
+  
+  const newSubmission = new QuestionSubmission({
+   question: questionId,
+   student,
+   answer,
+   timeTaken
   });
 
   await newSubmission.save();
-  const parsedAnswer = JSON.parse(newSubmission.answer);
-  newSubmission.answer = parsedAnswer;
-  return { ...newSubmission.toObject(), answer: parsedAnswer };
+  
+  return newSubmission;
 };
 
 exports.getSubmission = async (assignmentId) => {
@@ -69,8 +69,8 @@ exports.getSubmission = async (assignmentId) => {
 };
 
 exports.isSubmitted = async (userId, questionId) => {
-  const submission = await SubmissionModel.findOne({
-    assignmentId: questionId,
+  const submission = await QuestionSubmission.findOne({
+    question: questionId,
     student: userId,
   });
   if (submission) return true;
@@ -83,3 +83,10 @@ exports.allCreatedQuestion = async (user) => {
     .sort({ createdAt: -1 });
   return questions;
 };
+
+exports.getQuestionSubmissions = async (questionId) => {
+  const submissions = await QuestionSubmission.find({ question: questionId })
+    .populate('question').populate('student', '-password -isAdmin');
+  console.log(submissions);
+  return submissions;
+}

@@ -87,3 +87,14 @@ exports.questUserCreatedQuestion = async (req, res) => {
     res.json({ error: error.message });
   }
 };
+
+
+exports.getQuestionSubmissions = async (req, res) => {
+  try {
+    const { questionId } = req.params;
+    const submissions = await questionsServices.getQuestionSubmissions(questionId)
+    res.status(200).json({ success: { submissions } });
+  } catch (error) {
+    res.json({ error: error.message });
+  }
+}

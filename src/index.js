@@ -45,12 +45,35 @@ connectDB()
       },
     });
 
+    let onlineUser = [];
+
+    function getOnlineUsersByClass(classId) {
+      return onlineUser.filter((user) => user.class === classId);
+    }
+
     io.on('connection', (socket) => {
       socket.on('setup', (userData) => {
         if (userData?._id) {
-          socket.join(userData?._id);
+          socket.join(`${userData?._id}-${userData?.classId}`);
           socket.emit('connected');
+
+          if (
+            !onlineUser.some(
+              (user) =>
+                user.user === userData?._id && user.class === userData?.classId
+            )
+          ) {
+            onlineUser.push({
+              user: userData?._id,
+              class: userData?.classId,
+              socketId: socket.id,
+            });
+          } else {
+            console.log('user is there fuck');
+          }
         }
+        console.log(onlineUser, 'onlibe');
+        io.emit('online-users', getOnlineUsersByClass(userData?.classId))
       });
 
       socket.on('join-chat', (room) => {
@@ -59,28 +82,34 @@ connectDB()
       });
 
       socket.on('typing', (roomId) => {
-        console.log(roomId);
         socket.in(roomId).emit('typing', roomId);
       });
-      socket.on('stop-typing', (roomId) => socket.in(roomId).emit('stop-typing'));
+
+      socket.on('stop-typing', (roomId) =>
+        socket.in(roomId).emit('stop-typing')
+      );
 
       socket.on('new-message', (newMessageReceived) => {
         const { chat } = newMessageReceived;
         if (chat?.users) {
           chat.users.forEach((user) => {
             if (user._id !== newMessageReceived.sender._id) {
-              socket.to(user?._id).emit('message-received', newMessageReceived);
+              socket
+                .to(`${user?._id}-${chat?.class}`)
+                .emit('message-received', newMessageReceived);
             }
           });
         }
       });
 
       socket.on('disconnect', () => {
+        onlineUser = onlineUser.filter((user) => user.socketId !== socket.id);
+        console.log('after logout', onlineUser);
+        io.emit('online-users', onlineUser)
         socket.rooms.forEach((room) => {
           socket.leave(room);
         });
       });
-      console.log(socket.rooms);
     });
   })
   .catch((error) => {

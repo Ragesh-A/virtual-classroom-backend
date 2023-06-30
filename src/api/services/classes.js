@@ -47,7 +47,6 @@ exports.findOne = async (classId) => {
 
 exports.updateOne = async (classId, payload) => {
   const updatedClass = await Classes.updateOne({ _id: classId }, payload);
-  console.log(updatedClass);
   return updatedClass;
 };
 
@@ -57,7 +56,6 @@ exports.create = async (
   image = '',
 ) => {
   if (!payload.instructor) {
-    // eslint-disable-next-line no-param-reassign
     payload.instructor = createdBy;
   }
   const classCount = await Classes.find({ createdBy }).count();

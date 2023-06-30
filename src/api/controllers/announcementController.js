@@ -36,7 +36,6 @@ exports.getAnnouncements = async (req, res) => {
     }
     res.json({ success: { announcements } });
   } catch (error) {
-    console.log(error);
     res.json({ error: error.message });
   }
 };
@@ -76,7 +75,6 @@ exports.updateAnnouncement = async (req, res) => {
     const announcement = await announcementService.updateAnnouncement(req.body);
     res.json({ success: { announcement } });
   } catch (error) {
-    console.log(error);
     res.json({ error: error.message });
   }
 };
@@ -87,7 +85,6 @@ exports.deleteAnnouncement = async (req, res) => {
     const isDeleted = await announcementService.deleteAnnouncement(announcementId);
     res.json({ success: isDeleted });
   } catch (error) {
-    console.log(error);
     res.json({ error: error.message });
   }
 };

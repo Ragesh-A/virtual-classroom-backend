@@ -35,7 +35,6 @@ exports.findByClass = async (req, res) => {
     const assignments = await services.allAssignments(classId, _id, q);
     res.json({ success: { assignments } });
   } catch (error) {
-    console.log(error);
     res.json({ error: error.message });
   }
 };
@@ -43,7 +42,6 @@ exports.findByClass = async (req, res) => {
 exports.getAssignment = async (req, res) => {
   try {
     const { classId, assignmentId } = req.params;
-    console.log(classId, assignmentId);
     if (!assignmentId || !classId) throw new Error('assignment identification failed');
     const assignment = await services.getAssignment(assignmentId);
     res.json({ success: { assignment } });
@@ -69,7 +67,6 @@ exports.updateOne = async (req, res) => {
     });
     res.json({ success: { isUpdated } });
   } catch (error) {
-    console.log(error);
     res.json({ error: error.message });
   }
 };
@@ -91,7 +88,6 @@ exports.createSubmission = async (req, res) => {
     );
     res.json({ success: isSubmitted });
   } catch (error) {
-    console.log(error);
     res.json({ error: error.message });
   }
 };

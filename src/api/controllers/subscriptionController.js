@@ -16,7 +16,6 @@ exports.subscriptionIntent = async (req, res) => {
     const isCreated = await services.createSubscriptionIntent(plan);
     res.json({ success: isCreated });
   } catch (error) {
-    console.log(error);
     res.json({ error: error.message });
   }
 };
@@ -27,7 +26,6 @@ exports.createSubscription = async (req, res) => {
     const {
       paymentIntent, paymentIntentClientSecret, redirectStatus, plan = 'monthly',
     } = req.body;
-    console.log(paymentIntent);
     const isCreated = await services
       .createSubscription(_id, plan, paymentIntent, paymentIntentClientSecret, redirectStatus);
 

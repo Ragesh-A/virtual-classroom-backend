@@ -5,7 +5,6 @@ exports.adminDashboard = async (req, res) => {
     const data = await analyticsServices.adminDashboard();
     res.json({ success: { data } });
   } catch (error) {
-    console.log(error);
     res.json({ error: error.message });
   }
 };
@@ -26,7 +25,6 @@ exports.classDashboard = async (req, res) => {
     const data = await analyticsServices.classDashboard(classId);
     res.json({ success: { data } });
   } catch (error) {
-    console.log(error);
     res.json({ error: error.message });
   }
 };

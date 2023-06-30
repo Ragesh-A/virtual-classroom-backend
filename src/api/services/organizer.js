@@ -114,7 +114,6 @@ exports.resetInstructor = async (subscriber, instructorId) => {
     { createdBy: subscriber, instructor: instructorId },
     { $set: { instructor: subscriber } },
   );
-  console.log(isReset);
   return isReset;
 };
 

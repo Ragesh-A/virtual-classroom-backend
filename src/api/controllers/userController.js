@@ -40,7 +40,6 @@ exports.updateProfile = async (req, res) => {
     const user = await userService.updateProfile(_id, name, image);
     res.json({ success: { user } });
   } catch (error) {
-    console.log(error);
     res.json({ error: error.message });
   }
 };

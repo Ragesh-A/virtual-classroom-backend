@@ -14,7 +14,6 @@ exports.takeAttendance = async (classId, payload) => {
   const isTaken = await Attendance.findOne({ class: classId, createdAt: formattedToday });
 
   if (isTaken) {
-    console.log(filteredPayload);
     await Attendance.updateOne(
       { class: classId, createdAt: formattedToday },
       { students: filteredPayload },

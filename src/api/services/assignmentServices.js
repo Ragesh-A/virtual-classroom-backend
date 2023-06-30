@@ -19,7 +19,6 @@ exports.allAssignments = async (classId, student, q) => {
   const assignments = await Assignment.find({ classes: classId });
   const ids = assignments.map((assignment) => assignment._id);
   const submissions = await Submissions.find({ student, assignmentId: { $in: ids } }).populate('assignmentId');
-  // const currentDate = new Date();
   let result = [];
   switch (q) {
     case 'pending':
@@ -71,7 +70,6 @@ exports.createSubmission = async (student, assignmentId, answer, images) => {
   if (images) {
     photos = images.map((x) => x.filename);
   }
-  console.log(photos);
   const alreadySubmitted = await Submissions.findOne({ student, assignmentId });
   if (alreadySubmitted) throw new Error('already submitted');
   const newSubmission = new Submissions({
@@ -83,6 +81,5 @@ exports.createSubmission = async (student, assignmentId, answer, images) => {
 
 exports.updateSubmission = async (_id, payload) => {
   const updatedSubmission = await Submissions.findOneAndUpdate({ _id }, payload, { new: true });
-  console.log(updatedSubmission);
   return updatedSubmission;
 };

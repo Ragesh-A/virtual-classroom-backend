@@ -33,5 +33,4 @@ exports.enrollStudent = async (classId, studentId) => {
 
 exports.enrolledStudents = async (classId) => {
   const students = await Enrolment.findOne({ classId }).populate('students');
-  console.log(students);
 };

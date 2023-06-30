@@ -87,6 +87,5 @@ exports.allCreatedQuestion = async (user) => {
 exports.getQuestionSubmissions = async (questionId) => {
   const submissions = await QuestionSubmission.find({ question: questionId })
     .populate('question').populate('student', '-password -isAdmin');
-  console.log(submissions);
   return submissions;
 }

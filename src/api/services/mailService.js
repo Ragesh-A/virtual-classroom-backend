@@ -20,3 +20,10 @@ exports.requestResetPassword = async (emailOrPhone) => {
   await sendMail(emailOrPhone, 'OTP', `${otp}`);
   return otp;
 };
+
+exports.sendMail = async (sender, receiver, message) => {
+  if (!message || !sender) throw new Error('invalid data');
+  message =  `from: ${sender} \n ${message  }`
+  const response = await sendMail(receiver, 'contact', message,)
+  return false ? true : false
+}

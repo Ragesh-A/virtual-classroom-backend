@@ -1,4 +1,5 @@
 const services = require('../services/messageServices');
+const mailService = require('../services/mailService')
 
 exports.sendMessage = async (req, res) => {
   try {
@@ -21,3 +22,16 @@ exports.getMessage = async (req, res) => {
     res.json({ error: { message: error.message } });
   }
 };
+
+exports.sendMail = async (req, res) => {
+  try {
+    const { sender, message } = req.body;
+    const receiver = process.env.APP_EMAIL
+    const isSended = await mailService.sendMail(
+      sender, receiver, message,
+    )
+    res.json({ success: { isSended } });
+  } catch (error) {
+    res.json({ error: { message: error.message } });
+  }
+}
